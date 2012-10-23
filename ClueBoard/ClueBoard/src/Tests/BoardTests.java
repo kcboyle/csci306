@@ -21,7 +21,7 @@ import clue.RoomCell;
 public class BoardTests {
 	Board newBoard;
 	//May change depending on legend files//
-	public static final int NUM_ROOMS = 10;		
+	public static final int NUM_ROOMS = 11;		
 	public static final int NUM_ROWS = 24;
 	public static final int NUM_COLS = 23;
 	

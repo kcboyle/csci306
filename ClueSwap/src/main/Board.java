@@ -9,6 +9,8 @@ import java.util.Scanner;
 import java.util.HashSet;
 
 import javax.xml.stream.events.StartDocument;
+
+import main.Card.CardType;
 /**
  * @author: Craig Carlson
  * @author: Lars Walen
@@ -22,7 +24,7 @@ public class Board {
 	private ArrayList<Card> allCards = new ArrayList<Card>();
 	private ArrayList<ComputerPlayer> compPlayers = new ArrayList<ComputerPlayer>();
 	private ArrayList<String> answers = new ArrayList<String>();					//stores 3 strings that will be the game answer
-	private ArrayList<String> accusations = new ArrayList<String>();				//stores 3 strings that will be a person's accusation
+	private ArrayList<String> accusations = new ArrayList<String>();				//stores 3 strings that will be a person's accusation or suggestion
 		
 	private HumanPlayer self = new HumanPlayer();
 	private int numRows;
@@ -42,7 +44,9 @@ public class Board {
 	public HashSet<Integer> targets;
 	private boolean[] visited;
 
-
+	//Who's Turn is it?? hmmmmm
+	private Player currentPlayer;
+	
 	/**
 	 * Creates board given filenames of legend file and board config file
 	 * @param legendFilename
@@ -246,6 +250,11 @@ public class Board {
 		}
 		return set;
 	}
+	
+	public String disproveSuggestion(ArrayList<String> accusation) {
+		String c = accusation.get(0);
+		return c;
+	}
 
 	/**
 	 * Convert row and column coordinates to cell index
@@ -290,6 +299,9 @@ public class Board {
 	public ArrayList<ComputerPlayer> getCompPlayers() {
 		return compPlayers;
 	}
+	public void setCompPlayers(ArrayList<ComputerPlayer> compPlayers) {
+		this.compPlayers = compPlayers;
+	}
 	public HumanPlayer getSelf() {
 		return self;
 	}
@@ -323,6 +335,19 @@ public class Board {
 	public ArrayList<String> getAccusations() {
 		return accusations;
 	}
+	public void setAccusations(ArrayList<String> accusations) {
+		//GOING TO NEED TO CLEAR BEFORE SETTING!!!!!!!!!!!!!!!!!
+		this.accusations = accusations;
+	}
+
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public void setCurrentPlayer(Player currentPlayer) {
+		this.currentPlayer = currentPlayer;
+	}
+
 	public BoardCell getCellAt(int i) {
 		return cells.get(i);
 	}

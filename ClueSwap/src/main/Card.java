@@ -40,4 +40,6 @@ public class Card {
 	public void setTimesDealt(int timesDealt) {
 		this.timesDealt = timesDealt;
 	}
+	
+
 }

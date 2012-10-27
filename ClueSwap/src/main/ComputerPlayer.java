@@ -4,6 +4,7 @@
  */
 package main;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 public class ComputerPlayer extends Player {
@@ -16,7 +17,9 @@ public class ComputerPlayer extends Player {
 		return locCell;										//returns the locCell
 		//picks a location from a list of targets
 	}
-	public void createSuggestion() {
+	public ArrayList<String> createSuggestion(String person, String room, String weapon) {
+		ArrayList<String> a = new ArrayList<String>();
+		return a;
 		//for use with GUI
 	}
 	public void updateSeen(Card seen) {

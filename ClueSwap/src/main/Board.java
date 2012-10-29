@@ -2,6 +2,7 @@ package main;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -24,20 +25,21 @@ public class Board {
 	private ArrayList<Card> allCards = new ArrayList<Card>();
 	private ArrayList<ComputerPlayer> compPlayers = new ArrayList<ComputerPlayer>();
 	private ArrayList<String> answers = new ArrayList<String>();					//stores 3 strings that will be the game answer
-	private ArrayList<String> accusations = new ArrayList<String>();				//stores 3 strings that will be a person's accusation or suggestion
+	private ArrayList<String> accusations = new ArrayList<String>();				//stores 3 strings that will be a person's accusation 
+	private ArrayList<String> suggestions = new ArrayList<String>();				//stores 3 strings that will be a person's suggestion
 		
 	private HumanPlayer self = new HumanPlayer();
 	private int numRows;
 	
 	private int numColumns;
 	// The following will be used to check card configurations
-	private int numPlayers;
-	private int numRooms;
-	private int numWeapons;
+	private int numPlayers = 0;
+	private int numRooms = 0;
+	private int numWeapons = 0;
 	//The following will be used to check cards dealt
 	private int numDealt;				//will track number of total cards dealt
 	//the following will be used to track winning status
-	private boolean won;
+	private boolean won = false;
 
 	// Adjacencies and targets related members
 	private Map<Integer, LinkedList<Integer>> adjMatrix;
@@ -61,6 +63,7 @@ public class Board {
 		visited = new boolean[numRows * numColumns];
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<Integer>();
+		//dealCards();  //Shuffles cards and causes loadCards to fail.
 		calcAdjacencies();
 	}
 
@@ -81,12 +84,12 @@ public class Board {
 			System.out.println("could not read board file");
 		}
 		try {
-			readBoard(playersFilename);
+			readPlayers(playersFilename);
 		} catch (FileNotFoundException e) {
 			System.out.println("could not read players file");
 		}
 		try {
-			readBoard(cardsFilename);
+			readCards(cardsFilename);
 		} catch (FileNotFoundException e) {
 			System.out.println("could not read cards file");
 		}
@@ -151,6 +154,75 @@ public class Board {
 			if( rowSize.get(i) != rowSize.get(i-1) ) throw new BadConfigFormatException("Not all rows the same length");
 		}
 
+	}
+	
+	// Reads in Players
+	public void readPlayers(String playersFilename) throws FileNotFoundException, BadConfigFormatException {
+		String playersLine; 
+		FileReader playersFile = new FileReader(playersFilename);
+		Scanner scan = new Scanner(playersFile);
+		playersLine = scan.nextLine();
+		String[] line = playersLine.split(", ");
+		self.setName(line[0]);
+		self.setColor(line[1]);
+		self.setStartRow(Integer.parseInt(line[2]));
+		self.setStartCol(Integer.parseInt(line[3]));
+		while( scan.hasNextLine() ) {
+			playersLine = scan.nextLine();
+			String[] l;
+			l = playersLine.split(", ");
+			ComputerPlayer comp = new ComputerPlayer();
+			comp.setName(l[0]);
+			comp.setColor(l[1]);
+			comp.setStartRow(Integer.parseInt(l[2]));
+			comp.setStartCol(Integer.parseInt(l[3]));
+			compPlayers.add(comp);
+		}
+		scan.close();
+	} 
+	
+	// Reads in Cards
+	public void readCards(String cardsFilename) throws FileNotFoundException, BadConfigFormatException {
+		String cardsLine; 
+		FileReader cardsFile = new FileReader(cardsFilename);
+		Scanner scan = new Scanner(cardsFile);
+		while( scan.hasNextLine() ) {
+			cardsLine = scan.nextLine();
+			String[] card;
+			card = cardsLine.split(", ");
+			CardType type = CardType.NONE;
+			switch (card[1]) {
+			case "P": 	type = CardType.PERSON;
+			numPlayers++;
+			break;
+			case "R":   type = CardType.ROOM;
+			numRooms++;
+			break;
+			case "W":   type = CardType.WEAPON;
+			numWeapons++;
+			break;
+			}
+			Card c = new Card(card[0], type);
+			allCards.add(c);
+		}
+		scan.close();
+	}
+	
+	public void dealCards() {
+		Collections.shuffle(allCards);
+		for (int i = 0; i < allCards.size();) {
+			for (int j = 0; j < compPlayers.size(); j++) {
+				compPlayers.get(j).addCards(allCards.get(i));
+				allCards.get(i).incTimesDealt();
+				compPlayers.get(j).updateSeen(allCards.get(i));
+				numDealt++;
+				i++;
+			}
+			self.addCards(allCards.get(i));
+			allCards.get(i).incTimesDealt();
+			numDealt++;
+			i++;
+		}
 	}
 
 	/**
@@ -224,7 +296,7 @@ public class Board {
 
 	public void calcTargets(int startLocation, int numberOfSteps) {
 		targets.clear();
-		if( getCellAt(startLocation).isDoorway() ) {
+		if (getCellAt(startLocation).isDoorway()) {
 			visited[startLocation] = true;
 			targets = calcTargetsRecursively(getAdjList(startLocation).getLast(), numberOfSteps-1);
 		} else {
@@ -250,10 +322,19 @@ public class Board {
 		}
 		return set;
 	}
-	
-	public String disproveSuggestion(ArrayList<String> accusation) {
-		String c = accusation.get(0);
-		return c;
+	public String disproveSuggestion(ArrayList<String> suggestion) {
+		ArrayList<Card> playerCards = new ArrayList<Card>();
+		playerCards = compPlayers.get(0).getCards();
+		for (int i = 0; i < playerCards.size(); i++)  {
+			for (int j = 0; j < 3; j++) {
+				String str1 = suggestion.get(j);
+				String str2 = playerCards.get(i).getName();
+				if (str1.equals(str2)) {
+					return str2;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -302,6 +383,9 @@ public class Board {
 	public void setCompPlayers(ArrayList<ComputerPlayer> compPlayers) {
 		this.compPlayers = compPlayers;
 	}
+	public void addCompPlayers(ComputerPlayer compPlayer) {
+		compPlayers.add(compPlayer);
+	}
 	public HumanPlayer getSelf() {
 		return self;
 	}
@@ -335,19 +419,31 @@ public class Board {
 	public ArrayList<String> getAccusations() {
 		return accusations;
 	}
-	public void setAccusations(ArrayList<String> accusations) {
-		//GOING TO NEED TO CLEAR BEFORE SETTING!!!!!!!!!!!!!!!!!
-		this.accusations = accusations;
+	public void setAccusations(ArrayList<String> newAccusations) {
+		accusations = newAccusations;
+	}
+	
+	public void setWon() {
+		//determines if a winner has occured by comparing accusation to answers
+		if (getAccusations().get(0).equals(getAnswers().get(0)) && getAccusations().get(1).equals(getAnswers().get(1)) && getAccusations().get(2).equals(getAnswers().get(2))) {
+			won = true;
+		} else {
+			won = false;
+		}
 	}
 
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
-
 	public void setCurrentPlayer(Player currentPlayer) {
 		this.currentPlayer = currentPlayer;
 	}
-
+	public ArrayList<String> getSuggestions() {
+		return suggestions;
+	}
+	public void setSuggestions(ArrayList<String> suggestions) {
+		this.suggestions = suggestions;
+	}
 	public BoardCell getCellAt(int i) {
 		return cells.get(i);
 	}

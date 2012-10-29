@@ -15,7 +15,7 @@ public class BoardAdjTargetTests {
 	private static Board board;
 	@BeforeClass
 	public static void setUp() {
-		board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
+		board = new Board("roomLegend.txt", "config.txt", "players.csv", "cards.csv");
 	}
 
 	// Ensure that player does not move around within room

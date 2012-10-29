@@ -18,7 +18,7 @@ public class GameSetupTests {
 	private static Board board;
 	
 	@BeforeClass
-	public void setup() {
+	public static void setup() {
 		board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
 	}
 	
@@ -88,6 +88,7 @@ public class GameSetupTests {
 	
 	@Test 
 	public void dealTest() {
+		board.dealCards();
 		//Every player should have 4 cards (6 people + 9 rooms + 9 weapons/ 6)
 		Assert.assertEquals(4, board.getSelf().getCards().size());		
 		Assert.assertEquals(4, board.getCompPlayers().get(0).getCards().size());

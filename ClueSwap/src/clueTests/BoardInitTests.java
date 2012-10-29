@@ -23,7 +23,7 @@ public class BoardInitTests {
 
 	@BeforeClass
 	public static void setUp() {
-		board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
+		board = new Board("roomLegend.txt", "config.txt", "players.csv", "cards.csv");
 	}
 	@Test
 	public void testRooms() {

@@ -4,10 +4,13 @@
  */
 package main;
 
+import java.util.ArrayList;
+
 public class HumanPlayer extends Player {
 
 	public HumanPlayer() {
-		// TODO Auto-generated constructor stub
+		ArrayList<Card> cards = new ArrayList<Card>();
+		setCards(cards);
 	}
 
 }

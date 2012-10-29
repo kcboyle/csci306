@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public abstract class Player {
 	private String name;
 	private ArrayList<Card> cards;
-	private ArrayList<Card> cardsSeen;
 	private String color;
 	private int startRow;
 	private int startCol;
@@ -52,18 +51,14 @@ public abstract class Player {
 	public void setCards(ArrayList<Card> cards) {
 		this.cards = cards;
 	}
+	public void addCards(Card card) {
+		cards.add(card);
+	}
 	public int getCurrentLocation() {
 		return currentLocation;
 	}
 	public void setCurrentLocation(int currentLocation) {
 		this.currentLocation = currentLocation;
 	}
-	public ArrayList<Card> getCardsSeen() {
-		return cardsSeen;
-	}
-	public void setCardsSeen(ArrayList<Card> cardsSeen) {
-		this.cardsSeen = cardsSeen;
-	}
-	
 	
 }

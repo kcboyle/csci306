@@ -9,7 +9,7 @@ public class Card {
 	private int timesDealt; 				//will track if the card has been dealt to a player
 
 	public enum CardType {
-		PERSON, WEAPON, ROOM;
+		PERSON, WEAPON, ROOM, NONE;
 	}
 	private CardType cardType;
 	
@@ -37,8 +37,8 @@ public class Card {
 	public int getTimesDealt() {
 		return timesDealt;
 	}
-	public void setTimesDealt(int timesDealt) {
-		this.timesDealt = timesDealt;
+	public void incTimesDealt() {
+		timesDealt++;
 	}
 	
 

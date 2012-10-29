@@ -14,8 +14,6 @@ public class ComputerPlayer extends Player {
 	private ArrayList<String> cardsSeen;
 	
 	public ComputerPlayer() {
-		ArrayList<Card> cards = new ArrayList<Card>();
-		setCards(cards);
 		ArrayList<String> seen = new ArrayList<String>();
 		setCardsSeen(seen);
 		lastRoomVisited = 'X';

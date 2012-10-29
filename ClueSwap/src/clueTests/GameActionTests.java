@@ -36,7 +36,7 @@ public class GameActionTests {
 	@BeforeClass
 	public static void setup() {
 		board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
-		player = new ComputerPlayer();
+		player = board.getCompPlayers().get(0);
 		//randomly generated cards
 		card1 = new Card("Gandalf", CardType.PERSON);
 		card2 = new Card("Daniel Jackson", CardType.PERSON);
@@ -147,7 +147,6 @@ public class GameActionTests {
 	@Test
 	public void disproveSuggestion_SinglePlayer_Test() {
 		//add all the cards to playerCards
-		board.addCompPlayers(player);
 		//changed to have an addCards function instead
 		player.addCards(card1);
 		player.addCards(card2);
@@ -161,7 +160,9 @@ public class GameActionTests {
 		
 		//This is a single player with a single match (W, P, or R)
 		cardShown = board.disproveSuggestion(board.getSuggestions());
-		Assert.assertEquals(card1.getName(), cardShown);
+		//Assert.assertEquals(1, board.getCompPlayers().size());
+		//Assert.assertEquals(4, board.getCompPlayers().get(0).getCards().size());
+		Assert.assertEquals(card1.getName(), board.getCompPlayers().get(0).getCards().get(0).getName());
 		
 		//Reset Accusation
 		a.clear();
@@ -208,27 +209,19 @@ public class GameActionTests {
 	
 	@Test
 	public void disproveSuggestion_AllPlayer_Test() {
-		ComputerPlayer cp1 = new ComputerPlayer();
+		
 		ArrayList<Card> cd = new ArrayList<Card>();
 		cd.add(card1);
-		cp1.setCards(cd);
-		ComputerPlayer cp2 = new ComputerPlayer();
+		board.getCompPlayers().get(0).setCards(cd);
 		cd.clear();
 		cd.add(card2);
-		cp2.setCards(cd);
-		ComputerPlayer cp3 = new ComputerPlayer();
+		board.getCompPlayers().get(1).setCards(cd);
 		cd.clear();
 		cd.add(card3);
-		cp3.setCards(cd);
-		ArrayList<ComputerPlayer> cp = new ArrayList<ComputerPlayer>();
-		cp.add(cp1);
-		cp.add(cp2);
-		cp.add(cp3);
-		HumanPlayer hp1 = new HumanPlayer();
+		board.getCompPlayers().get(2).setCards(cd);
 		cd.clear();
 		cd.add(card4);
-		hp1.setCards(cd);
-		board.setCompPlayers(cp);
+		board.getSelf().setCards(cd);
 		
 		// ALL PLAYER, no card found
 		ArrayList<String> a = new ArrayList<String>();
@@ -242,7 +235,7 @@ public class GameActionTests {
 		Assert.assertEquals(null, cardShown);
 
 		//ALL PLAYER, only human has THE card
-		board.setCurrentPlayer(hp1);				//sets the currentPlayer to the human player
+		board.setCurrentPlayer(board.getSelf());				//sets the currentPlayer to the human player
 		//Reset Accusation
 		a.clear();
 		a.add("Donna Noble");
@@ -256,7 +249,7 @@ public class GameActionTests {
 		
 
 		//ALL PLAYER, only computer has THE card
-		board.setCurrentPlayer(cp1);				//sets the currentPlayer to the computer player
+		board.setCurrentPlayer(board.getCompPlayers().get(0));				//sets the currentPlayer to the computer player
 		//Reset Accusation
 		a.clear();
 		a.add("Gandalf");							//card exists
@@ -270,7 +263,7 @@ public class GameActionTests {
 
 
 		//ALL PLAYER, only human has THE card
-		board.setCurrentPlayer(cp1);				//sets the currentPlayer to the computer player
+		board.setCurrentPlayer(board.getCompPlayers().get(0));				//sets the currentPlayer to the computer player
 		//Reset Accusation
 		a.clear();
 		a.add("Gandalf");							//card exists
@@ -283,7 +276,7 @@ public class GameActionTests {
 		Assert.assertEquals("Dalek", cardShown);
 		
 		//ALL PLAYER, 2 players have cards!
-		board.setCurrentPlayer(cp2);				//sets the currentPlayer to the computer player
+		board.setCurrentPlayer(board.getCompPlayers().get(1));				//sets the currentPlayer to the computer player
 		//Reset Accusation
 		a.clear();
 		a.add("Gandalf");							//card exists
@@ -297,9 +290,9 @@ public class GameActionTests {
 		for (int i=0; i<100; i++) {
 			//Count time seen for each card, cause the function need to be RANDOM!!! 
 			cardShown = board.disproveSuggestion(board.getSuggestions());
-			if (cardShown.equals(cp1.getCards().get(0).getName()))
+			if (cardShown.equals(board.getCompPlayers().get(0).getCards().get(0).getName()))
 				player_1++;
-			else if (cardShown.equals(hp1.getCards().get(0).getName()))
+			else if (cardShown.equals(board.getSelf().getCards().get(0).getName()))
 				player_2++;
 			else
 				fail("Invalid target selected");

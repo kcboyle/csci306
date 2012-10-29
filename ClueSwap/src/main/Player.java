@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public abstract class Player {
 	private String name;
-	private ArrayList<Card> cards;
+	private ArrayList<Card> cards = new ArrayList<Card>();
 	private String color;
 	private int startRow;
 	private int startCol;

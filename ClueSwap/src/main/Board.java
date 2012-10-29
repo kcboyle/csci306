@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.HashSet;
 
@@ -193,14 +194,14 @@ public class Board {
 			CardType type = CardType.NONE;
 			switch (card[1]) {
 			case "P": 	type = CardType.PERSON;
-			numPlayers++;
-			break;
+						numPlayers++;
+						break;
 			case "R":   type = CardType.ROOM;
-			numRooms++;
-			break;
+						numRooms++;
+						break;
 			case "W":   type = CardType.WEAPON;
-			numWeapons++;
-			break;
+						numWeapons++;
+						break;
 			}
 			Card c = new Card(card[0], type);
 			allCards.add(c);
@@ -323,14 +324,38 @@ public class Board {
 		return set;
 	}
 	public String disproveSuggestion(ArrayList<String> suggestion) {
-		ArrayList<Card> playerCards = new ArrayList<Card>();
-		playerCards = compPlayers.get(0).getCards();
-		for (int i = 0; i < playerCards.size(); i++)  {
-			for (int j = 0; j < 3; j++) {
-				String str1 = suggestion.get(j);
-				String str2 = playerCards.get(i).getName();
-				if (str1.equals(str2)) {
-					return str2;
+		Random p_rand = new Random();
+		Random c_rand = new Random();
+		int playerInt = p_rand.nextInt(compPlayers.size());
+		int cardInt;	
+		ArrayList<Player> players = new ArrayList<Player>();
+		players.add(self);
+		for (int j = 0; j < compPlayers.size(); j++) {
+			players.add(compPlayers.get(j));
+		}
+		ArrayList<String> playerCards = new ArrayList<String>();
+		int counter = players.size();
+		ArrayList<String> matches = new ArrayList<String>();
+		while (counter > 0) {
+			if (!(currentPlayer == players.get(playerInt))) {
+				for (int i = 0; i < players.get(playerInt).getCards().size(); ++i ) {
+					playerCards.add(players.get(playerInt).getCards().get(i).getName());
+				}
+				if (playerCards.contains(suggestion.get(0)))
+					matches.add(suggestion.get(0));
+				if(playerCards.contains(suggestion.get(1)))
+					matches.add(suggestion.get(1));
+				if(playerCards.contains(suggestion.get(2)))
+					matches.add(suggestion.get(2));
+				if (playerInt < players.size() - 1) {
+					playerInt++;
+				} else {
+					playerInt = 0;
+				}
+				counter--;
+				if (matches.size() > 0 ) {
+					cardInt = c_rand.nextInt(matches.size());
+					return matches.get(cardInt);
 				}
 			}
 		}

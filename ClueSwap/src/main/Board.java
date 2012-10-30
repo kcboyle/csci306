@@ -23,15 +23,15 @@ public class Board {
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
 	private Map<Character, String> rooms = new HashMap<Character, String>();
 	private Map<String, Character> iRooms = new HashMap<String, Character>();		//stores the room initial
-	private ArrayList<Card> allCards = new ArrayList<Card>();
-	private ArrayList<ComputerPlayer> compPlayers = new ArrayList<ComputerPlayer>();
+	private ArrayList<Card> allCards = new ArrayList<Card>();						//ArrayList of all possible cards in the game...Note their awesomeness
+	private ArrayList<ComputerPlayer> compPlayers = new ArrayList<ComputerPlayer>();//Stores a list of all computerPlayers
 	private ArrayList<String> answers = new ArrayList<String>();					//stores 3 strings that will be the game answer
 	private ArrayList<String> accusations = new ArrayList<String>();				//stores 3 strings that will be a person's accusation 
 	private ArrayList<String> suggestions = new ArrayList<String>();				//stores 3 strings that will be a person's suggestion
 		
 	private HumanPlayer self = new HumanPlayer();
-	private int numRows;
 	
+	private int numRows;
 	private int numColumns;
 	// The following will be used to check card configurations
 	private int numPlayers = 0;
@@ -48,7 +48,7 @@ public class Board {
 	private boolean[] visited;
 
 	//Who's Turn is it?? hmmmmm
-	private Player currentPlayer;
+	private Player currentPlayer = self;							//human should start the game. default
 	
 	/**
 	 * Creates board given filenames of legend file and board config file
@@ -64,7 +64,7 @@ public class Board {
 		visited = new boolean[numRows * numColumns];
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<Integer>();
-		//dealCards();  //Shuffles cards and causes loadCards to fail.
+		//dealCards();  //Shuffles cards and causes loadCards to fail. Use in GUI for actual gameplay
 		calcAdjacencies();
 	}
 
@@ -210,17 +210,22 @@ public class Board {
 	}
 	
 	public void dealCards() {
-		Collections.shuffle(allCards);
-		for (int i = 0; i < allCards.size();) {
+		//takes the list of all cards and shuffles them into a new array for random distribution
+		ArrayList<Card> c = new ArrayList<Card>();
+		for (int j = 0; j < allCards.size(); j++) {
+			c.add(allCards.get(j));
+		}
+		Collections.shuffle(c);
+		for (int i = 0; i < c.size();) {
 			for (int j = 0; j < compPlayers.size(); j++) {
-				compPlayers.get(j).addCards(allCards.get(i));
-				allCards.get(i).incTimesDealt();
-				compPlayers.get(j).updateSeen(allCards.get(i));
+				compPlayers.get(j).addCards(c.get(i));
+				c.get(i).incTimesDealt();
+				compPlayers.get(j).updateSeen(c.get(i).getName());
 				numDealt++;
 				i++;
 			}
-			self.addCards(allCards.get(i));
-			allCards.get(i).incTimesDealt();
+			self.addCards(c.get(i));
+			c.get(i).incTimesDealt();
 			numDealt++;
 			i++;
 		}
@@ -323,21 +328,22 @@ public class Board {
 		}
 		return set;
 	}
-	public String disproveSuggestion(ArrayList<String> suggestion) {
-		Random p_rand = new Random();
-		Random c_rand = new Random();
-		int playerInt = p_rand.nextInt(compPlayers.size());
+	public String disproveSuggestion(ArrayList<String> suggestion, Player current) {
+		Random p_rand = new Random();		//for random player
+		Random c_rand = new Random();		//for random card
+		int playerInt;						
 		int cardInt;	
-		ArrayList<Player> players = new ArrayList<Player>();
+		ArrayList<Player> players = new ArrayList<Player>();	//all players in one list
 		players.add(self);
 		for (int j = 0; j < compPlayers.size(); j++) {
 			players.add(compPlayers.get(j));
 		}
-		ArrayList<String> playerCards = new ArrayList<String>();
-		int counter = players.size();
-		ArrayList<String> matches = new ArrayList<String>();
+		playerInt = p_rand.nextInt(players.size());
+		ArrayList<String> playerCards = new ArrayList<String>();		//copy list of the cards each player has
+		int counter = players.size();									// iteration through each player only once
+		ArrayList<String> matches = new ArrayList<String>();			//holds which cards would match the suggestion
 		while (counter > 0) {
-			if (!(currentPlayer == players.get(playerInt))) {
+			if (!(current.getName().equals(players.get(playerInt).getName()))) {
 				for (int i = 0; i < players.get(playerInt).getCards().size(); ++i ) {
 					playerCards.add(players.get(playerInt).getCards().get(i).getName());
 				}
@@ -347,17 +353,21 @@ public class Board {
 					matches.add(suggestion.get(1));
 				if(playerCards.contains(suggestion.get(2)))
 					matches.add(suggestion.get(2));
-				if (playerInt < players.size() - 1) {
-					playerInt++;
-				} else {
-					playerInt = 0;
-				}
-				counter--;
 				if (matches.size() > 0 ) {
 					cardInt = c_rand.nextInt(matches.size());
-					return matches.get(cardInt);
+					for (int f = 0; f < compPlayers.size(); f++) {
+						compPlayers.get(f).updateSeen(matches.get(cardInt));
+					}
+					return matches.get(cardInt);						//randomly returns match
 				}
 			}
+			//if the random playerInt reaches end of the array, restarts at the beginning
+			if (playerInt < players.size() - 1) {		
+				playerInt++;
+			} else {
+				playerInt = 0;
+			}
+			counter--;
 		}
 		return null;
 	}

@@ -36,7 +36,9 @@ public class ComputerPlayer extends Player {
 	}
 	
 	public ArrayList<String> createSuggestion(String person, String room, String weapon) {
+		//computer logic for creating a suggestion
 		char r = 'Z';
+		//converts given room to a char 
 		switch (room) {
 			case "Library": r = 'L';
 							break;
@@ -57,6 +59,7 @@ public class ComputerPlayer extends Player {
 			case "Hall": r = 'H';
 							break;
 		}
+		//must be currentRoom 
 		if (r == getLastRoomVisited()) {
 			if (!(cardsSeen.contains(person)) && !(cardsSeen.contains(weapon))) {
 				ArrayList<String> selection = new ArrayList<String>();
@@ -70,10 +73,9 @@ public class ComputerPlayer extends Player {
 		} else {
 			return null;
 		}
-		//for use with GUI
 	}
-	public void updateSeen(Card seen) {
-		cardsSeen.add(seen.getName());
+	public void updateSeen(String seen) {
+		cardsSeen.add(seen);
 	}
 	
 	//for use with GUI

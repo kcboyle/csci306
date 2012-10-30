@@ -21,6 +21,7 @@ import main.ComputerPlayer;
 import main.HumanPlayer;
 import main.Player;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -33,8 +34,8 @@ public class GameActionTests {
 	private static Card card4;
 	String cardShown;
 	
-	@BeforeClass
-	public static void setup() {
+	@Before
+	public void setup() {
 		board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
 		player = board.getCompPlayers().get(0);
 		//randomly generated cards
@@ -159,7 +160,7 @@ public class GameActionTests {
 		board.setSuggestions(a);
 		
 		//This is a single player with a single match (W, P, or R)
-		cardShown = board.disproveSuggestion(board.getSuggestions());
+		cardShown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
 		//Assert.assertEquals(1, board.getCompPlayers().size());
 		//Assert.assertEquals(4, board.getCompPlayers().get(0).getCards().size());
 		Assert.assertEquals(card1.getName(), board.getCompPlayers().get(0).getCards().get(0).getName());
@@ -172,7 +173,7 @@ public class GameActionTests {
 		board.setSuggestions(a);
 		
 		// This is if it is null... (bad guess)
-		cardShown = board.disproveSuggestion(board.getSuggestions());
+		cardShown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
 		Assert.assertEquals(null, cardShown);
 		
 		//Reset Accusation
@@ -188,7 +189,7 @@ public class GameActionTests {
 		int str_3 = 0;
 		// Run the test 100 times
 		for (int i=0; i<100; i++) {
-			cardShown = board.disproveSuggestion(board.getSuggestions());
+			cardShown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
 			Assert.assertTrue(a.contains(cardShown));			//makes sure that an irrelevant card is not shown, ie card shown is in the accusation
 			if (cardShown.equals(player.getCards().get(1).getName()))
 				str_1++;
@@ -209,19 +210,10 @@ public class GameActionTests {
 	
 	@Test
 	public void disproveSuggestion_AllPlayer_Test() {
-		
-		ArrayList<Card> cd = new ArrayList<Card>();
-		cd.add(card1);
-		board.getCompPlayers().get(0).setCards(cd);
-		cd.clear();
-		cd.add(card2);
-		board.getCompPlayers().get(1).setCards(cd);
-		cd.clear();
-		cd.add(card3);
-		board.getCompPlayers().get(2).setCards(cd);
-		cd.clear();
-		cd.add(card4);
-		board.getSelf().setCards(cd);
+		board.getCompPlayers().get(0).addCards(card1);
+		board.getCompPlayers().get(1).addCards(card2);
+		board.getCompPlayers().get(2).addCards(card3);
+		board.getSelf().addCards(card4);
 		
 		// ALL PLAYER, no card found
 		ArrayList<String> a = new ArrayList<String>();
@@ -231,11 +223,12 @@ public class GameActionTests {
 		board.setSuggestions(a);
 		
 		// This is if it is null... (bad guess)
-		cardShown = board.disproveSuggestion(board.getSuggestions());
+		cardShown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
 		Assert.assertEquals(null, cardShown);
 
 		//ALL PLAYER, only human has THE card
-		board.setCurrentPlayer(board.getSelf());				//sets the currentPlayer to the human player
+		Player current = board.getSelf();
+		board.setCurrentPlayer(current);				//sets the currentPlayer to the human player
 		//Reset Accusation
 		a.clear();
 		a.add("Donna Noble");
@@ -244,12 +237,13 @@ public class GameActionTests {
 		board.setSuggestions(a);
 
 		//only player who made accusation can disprove (this case the player is human)
-		cardShown = board.disproveSuggestion(board.getSuggestions());
+		cardShown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
+		Assert.assertTrue(board.getCurrentPlayer() == current);
 		Assert.assertEquals(null, cardShown);
 		
-
 		//ALL PLAYER, only computer has THE card
-		board.setCurrentPlayer(board.getCompPlayers().get(0));				//sets the currentPlayer to the computer player
+		current = board.getCompPlayers().get(0);
+		board.setCurrentPlayer(current);				//sets the currentPlayer to the computer player
 		//Reset Accusation
 		a.clear();
 		a.add("Gandalf");							//card exists
@@ -258,7 +252,7 @@ public class GameActionTests {
 		board.setSuggestions(a);
 
 		//only player who made accusation can disprove (this case the player is computer)
-		cardShown = board.disproveSuggestion(board.getSuggestions());
+		cardShown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
 		Assert.assertEquals(null, cardShown);
 
 
@@ -272,7 +266,7 @@ public class GameActionTests {
 		board.setSuggestions(a);
 
 		//The player who made the accusation can disprove, but so can human, and the human's card should be returned
-		cardShown = board.disproveSuggestion(board.getSuggestions());
+		cardShown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
 		Assert.assertEquals("Dalek", cardShown);
 		
 		//ALL PLAYER, 2 players have cards!
@@ -289,7 +283,8 @@ public class GameActionTests {
 		// Run the test 100 times
 		for (int i=0; i<100; i++) {
 			//Count time seen for each card, cause the function need to be RANDOM!!! 
-			cardShown = board.disproveSuggestion(board.getSuggestions());
+			cardShown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
+			
 			if (cardShown.equals(board.getCompPlayers().get(0).getCards().get(0).getName()))
 				player_1++;
 			else if (cardShown.equals(board.getSelf().getCards().get(0).getName()))
@@ -300,35 +295,30 @@ public class GameActionTests {
 		// Ensure we have 100 total selections (fail should also ensure)
 		assertEquals(100, player_1 + player_2);
 		// Ensure each card was selected
-		assertTrue(player_1 > 10);
+		assertTrue(player_1 > 10); // MAY NOT PASS OCCASIONALLY DUE TO COMPUTER RANDOMNESS FAIL. 
 		assertTrue(player_2 > 10);
 	}
 	
 	@Test
 	public void cardsSeenTest() {
-		
 		// This tests shows cards being updated in the "cardsSeen" ArrayList that each player has.
-		ComputerPlayer comp1 = new ComputerPlayer();
-		board.setCurrentPlayer(comp1);
-		ArrayList<Card> cd = new ArrayList<Card>();
-		cd.add(card1);
-		cd.add(card2);
-		cd.add(card3);
-		comp1.setCards(cd);
-		comp1.updateSeen(card1);
-		comp1.updateSeen(card2);
-		comp1.updateSeen(card3);
-		ComputerPlayer comp2 = new ComputerPlayer();
-		cd.clear();
-		cd.add(card4);
-		comp2.setCards(cd);
+		board.setCurrentPlayer(board.getCompPlayers().get(0));
+		board.getCompPlayers().get(0).addCards(card1);
+		board.getCompPlayers().get(0).addCards(card2);
+		board.getCompPlayers().get(0).addCards(card3);
+		board.getCompPlayers().get(0).updateSeen(card1.getName());
+		board.getCompPlayers().get(0).updateSeen(card2.getName());
+		board.getCompPlayers().get(0).updateSeen(card3.getName());
+		board.getCompPlayers().get(1).addCards(card4);
 		ArrayList<String> a = new ArrayList<String>();
 		a.add("Donna Noble");
 		a.add("Conservatory");
 		a.add("Dalek");									//card exists
 		board.setSuggestions(a);
-		cardShown = board.disproveSuggestion(board.getSuggestions());
-		Assert.assertTrue(comp1.getCardsSeen().contains(cardShown));
+		Assert.assertEquals(3, board.getSuggestions().size());
+		Assert.assertEquals(3, board.getCompPlayers().get(0).getCards().size());
+		cardShown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
+		Assert.assertTrue(board.getCompPlayers().get(0).getCardsSeen().contains(cardShown));
 	}
 	
 	@Test
@@ -342,9 +332,9 @@ public class GameActionTests {
 		cd.add(card2);
 		cd.add(card3);
 		comp3.setCards(cd);
-		comp3.updateSeen(card1);
-		comp3.updateSeen(card2);
-		comp3.updateSeen(card3);
+		comp3.updateSeen(card1.getName());
+		comp3.updateSeen(card2.getName());
+		comp3.updateSeen(card3.getName());
 		comp3.setLastRoomVisited('L');
 		board.setSuggestions(comp3.createSuggestion("Donna Noble", "Conservatory", "Mjolnir"));
 		Assert.assertEquals(null, board.getSuggestions());										//may be changed later during implementation

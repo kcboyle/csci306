@@ -6,17 +6,27 @@ import java.awt.BorderLayout;
 import javax.swing.*;
 
 import Board.Board;
-import DetectiveNotesGUI.DetectiveNotesGUI;
 
 public class ClueBoardGUI extends JFrame {
+	private DrawBoard drawBoard;
+	private int dx, dy;
 	public ClueBoardGUI(){
 		Board board = new Board();
 		setSize(new Dimension(700,700));
 		setTitle("Clue Game");
+		drawBoard = new DrawBoard();
+		// paintComponent will automatically be 
+		// called 1 time
+		add(drawBoard, BorderLayout.CENTER);
 		//menu
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
+	}
+	public void updateDrawing(int dx, int dy)
+	{
+		this.dx = dx; // need to add instance variables
+		this.dy = dy;
 	}
 	
 	//Creating File > Exit Menu for the GUI
@@ -45,6 +55,8 @@ public class ClueBoardGUI extends JFrame {
 		
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
+		 // This will cause rectangle to display in new location
+		gui.updateDrawing(100, 100);
 
 	}
 

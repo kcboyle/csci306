@@ -1,0 +1,6 @@
+Colonel Mustard/ Yellow/ 0,4
+Mrs. White/ White/ 0,15
+Reverend Green/ Green/ 5,19
+Mrs. Peacock/ Blue/ 16,19
+Professor Plum/ Purple/ 20,14
+Miss Scarlett/ Red/ 20,3

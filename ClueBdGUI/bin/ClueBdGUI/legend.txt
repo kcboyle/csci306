@@ -1,0 +1,12 @@
+D, Door
+X, Closet
+W, Walkway
+L, Library
+M, Marquez
+A, Alderson
+E, Green Center
+G, Guggenheim
+H, Engineering Anex
+B, Berthoud
+S, Stratton
+C, Chauvenet

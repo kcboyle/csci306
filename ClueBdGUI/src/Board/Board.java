@@ -89,6 +89,11 @@ public class Board {
 	public int calcIndex(int row, int column){
 		return (row*numColumns+column);
 	}
+	//returns the coordinate of the index
+	public int[] calcCoords(int index) {
+		int[] coords = { index/numColumns, index%numColumns };
+		return coords;
+	}
 
 	public boolean doorwayWorks(int index, RoomCell.DoorDirection dd) {
 		RoomCell rc = (RoomCell) cells.get(index);

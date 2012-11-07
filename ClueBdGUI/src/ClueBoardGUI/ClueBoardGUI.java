@@ -14,7 +14,7 @@ public class ClueBoardGUI extends JFrame {
 		Board board = new Board();
 		setSize(new Dimension(700,700));
 		setTitle("Clue Game");
-		drawBoard = new DrawBoard();
+		drawBoard = new DrawBoard(board);
 		// paintComponent will automatically be 
 		// called 1 time
 		add(drawBoard, BorderLayout.CENTER);
@@ -23,7 +23,8 @@ public class ClueBoardGUI extends JFrame {
 		setJMenuBar(menuBar);
 		menuBar.add(createFileMenu());
 	}
-	public void updateDrawing(int dx, int dy)
+	//will update when player moves
+	public void updatePlayer(int dx, int dy)
 	{
 		this.dx = dx; // need to add instance variables
 		this.dy = dy;
@@ -55,8 +56,9 @@ public class ClueBoardGUI extends JFrame {
 		
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
-		 // This will cause rectangle to display in new location
-		gui.updateDrawing(100, 100);
+		gui.setResizable(false);
+		// This will draw the new location of player
+		gui.updatePlayer(100, 100);
 
 	}
 

@@ -11,7 +11,7 @@ import javax.swing.*;
 
 import main.Board;
 
-public class DetectiveNotesGUI extends JFrame{
+public class DetectiveNotesGUI extends JDialog{
 	//Basic GUI Setup
 	public DetectiveNotesGUI() {
 		//creates a board
@@ -59,7 +59,7 @@ public class DetectiveNotesGUI extends JFrame{
 		
 		class MenuItemListener implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				setVisible(false);							//hides the detective notes
 			}
 		}
 		item.addActionListener(new MenuItemListener());
@@ -68,7 +68,7 @@ public class DetectiveNotesGUI extends JFrame{
 	
 	
 	/**
-	 * @param args
+	 * @param args 
 	public static void main(String[] args) {
 		//Setting up basic items in JFrame
 		DetectiveNotesGUI gui = new DetectiveNotesGUI();

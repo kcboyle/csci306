@@ -5,8 +5,8 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import Board.Board;
-import Board.Card.CardType;
+import main.Board;
+import main.Card.CardType;
 
 public class RoomsSeenPanel extends JPanel {
 	private Board board;
@@ -16,9 +16,9 @@ public class RoomsSeenPanel extends JPanel {
 		this.board = board;
 		setLayout(new GridLayout(3,3));
 		setBorder(new TitledBorder (new EtchedBorder(), "Rooms"));
-		for (int i = 0; i < board.getDeck().size(); ++i) {
-			if (board.getDeck().get(i).getCardtype() == CardType.ROOM) {
-				add(new JCheckBox(board.getDeck().get(i).getName()));
+		for (int i = 0; i < board.getAllCards().size(); ++i) {
+			if (board.getAllCards().get(i).getCardType() == CardType.ROOM) {
+				add(new JCheckBox(board.getAllCards().get(i).getName()));
 			}
 		}
 	}

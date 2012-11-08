@@ -5,13 +5,13 @@ import java.awt.event.*;
 import java.awt.BorderLayout;
 import javax.swing.*;
 
-import Board.Board;
+import main.Board;
 
 public class DetectiveNotesGUI extends JFrame{
 	//Basic GUI Setup
 	public DetectiveNotesGUI() {
 		//creates a board
-		Board board = new Board();
+		Board board = new Board("roomLegend.txt", "config.txt", "players.csv", "cards.csv");
 		
 		setSize(new Dimension(550,500));
 		setTitle("Detective Notes");

@@ -2,8 +2,8 @@ package DetectiveNotesGUI;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import Board.Board;
-import Board.Card.CardType;
+import main.Board;
+import main.Card.CardType;
 
 public class WeaponGuessPanel extends JPanel{
 		private Board board;
@@ -18,9 +18,9 @@ public class WeaponGuessPanel extends JPanel{
 		private JComboBox createWeaponCombo()
 		{
 			JComboBox combo = new JComboBox();
-			for (int i = 0; i < board.getDeck().size(); ++i) {
-				if (board.getDeck().get(i).getCardtype() == CardType.WEAPON) {
-					combo.addItem(board.getDeck().get(i).getName());
+			for (int i = 0; i < board.getAllCards().size(); ++i) {
+				if (board.getAllCards().get(i).getCardType() == CardType.WEAPON) {
+					combo.addItem(board.getAllCards().get(i).getName());
 				} 
 			}
 			return combo;

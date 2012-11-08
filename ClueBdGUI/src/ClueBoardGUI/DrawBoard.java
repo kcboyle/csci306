@@ -92,7 +92,7 @@ public class DrawBoard extends JPanel {
 				if (board.getRoomCellAt(coords[0], coords[1]).isName()) {
 					g.setColor(Color.BLUE);
 					char key = board.getRoomCellAt(coords[0], coords[1]).getInitial();
-					g.setFont(new Font("Chiller", Font.BOLD, 20));
+					g.setFont(new Font("Chiller", Font.BOLD, 18));
 					g.drawString(rooms.get(key), x1, y1);
 					
 				}

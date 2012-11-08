@@ -1,3 +1,7 @@
+/**
+ * Kira Combs
+ * Maria Deslis
+ */
 package DetectiveNotesGUI;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -65,7 +69,6 @@ public class DetectiveNotesGUI extends JFrame{
 	
 	/**
 	 * @param args
-	 */
 	public static void main(String[] args) {
 		//Setting up basic items in JFrame
 		DetectiveNotesGUI gui = new DetectiveNotesGUI();
@@ -73,6 +76,6 @@ public class DetectiveNotesGUI extends JFrame{
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
 
-	}
+	}*/
 
 }

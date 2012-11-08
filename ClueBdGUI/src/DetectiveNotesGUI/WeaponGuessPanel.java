@@ -1,3 +1,7 @@
+/**
+ * Kira Combs
+ * Maria Deslis
+ */
 package DetectiveNotesGUI;
 import javax.swing.*;
 import javax.swing.border.*;

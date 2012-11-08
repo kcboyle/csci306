@@ -1,3 +1,7 @@
+/**
+ * Kira Combs
+ * Maria Deslis
+ */
 package ClueBoardGUI;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -6,6 +10,8 @@ import java.awt.BorderLayout;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
+
+import DetectiveNotesGUI.DetectiveNotesGUI;
 
 import main.Board;
 
@@ -19,17 +25,8 @@ public class ClueBoardGUI extends JFrame {
 		setSize(new Dimension(xSize,ySize));
 		setTitle("Clue Game");
 		drawBoard = new DrawBoard(board, xSize, ySize-70);
-		
-		JPanel a = new JPanel();
-		JPanel b = new JPanel();
-		
-		//a.setPreferredSize(new Dimension(10,10));
-		//b.setPreferredSize(new Dimension(10,10));
-		//add(a, BorderLayout.NORTH);
-		//add(b, BorderLayout.EAST);
 		// paintComponent will automatically be 
 		// called 1 time
-		
 		add(drawBoard, BorderLayout.CENTER);
 		//menu
 		JMenuBar menuBar = new JMenuBar();
@@ -37,18 +34,37 @@ public class ClueBoardGUI extends JFrame {
 		menuBar.add(createFileMenu());
 	}
 	//will update when player moves
-	public void updatePlayer(int dx, int dy)
+	/**public void updatePlayer(int dx, int dy)
 	{
 		this.dx = dx; // need to add instance variables
 		this.dy = dy;
-	}
+	}*/
 	
 	//Creating File > Exit Menu for the GUI
 	private JMenu createFileMenu(){
 		JMenu menu = new JMenu("File");
+		menu.add(createDetectiveNotes());
+		menu.addSeparator();
 		menu.add(createFileExitItem());
 		return menu;
 	}
+	
+	//bringing up the detective notes gui
+	private JMenuItem createDetectiveNotes(){
+		JMenuItem item = new JMenuItem("Detective Notes");
+		
+		class MenuItemListener implements ActionListener {
+			public void actionPerformed(ActionEvent e) {
+				DetectiveNotesGUI gui = new DetectiveNotesGUI();
+				gui.setVisible(true);
+				gui.setResizable(false);
+			}
+		}
+		item.addActionListener(new MenuItemListener());
+		return item;
+	}
+	
+	//creates exit menu item
 	private JMenuItem createFileExitItem(){
 		JMenuItem item = new JMenuItem("Exit");
 		
@@ -71,7 +87,7 @@ public class ClueBoardGUI extends JFrame {
 		gui.setVisible(true);
 		gui.setResizable(false);
 		// This will draw the new location of player
-		gui.updatePlayer(100, 100);
+		//gui.updatePlayer(100, 100);
 
 	}
 

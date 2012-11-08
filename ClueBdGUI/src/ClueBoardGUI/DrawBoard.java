@@ -24,9 +24,9 @@ public class DrawBoard extends JPanel {
 	{
 		this.board = board;
 		this.xSize = xSize;
-		this.ySize = ySize;
-		xTileSize = (xSize/board.getNumColumns());
-		yTileSize = (ySize/board.getNumRows());
+		this.ySize = ySize;									
+		xTileSize = (xSize/board.getNumColumns());			//height of a cell
+		yTileSize = (ySize/board.getNumRows());				//width of a cell
 	}
 
 	public void paintComponent(Graphics g)
@@ -86,6 +86,7 @@ public class DrawBoard extends JPanel {
 						}
 					}
 				}
+				//write the room name in the appropriate room
 				if (board.getRoomCellAt(coords[0], coords[1]).isName()) {
 					g.setColor(Color.PINK);
 					char key = board.getRoomCellAt(coords[0], coords[1]).getInitial();

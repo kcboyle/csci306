@@ -12,8 +12,8 @@ import main.Board;
 public class ClueBoardGUI extends JFrame {
 	private DrawBoard drawBoard;
 	private int dx, dy;
-	private int xSize = 700;
-	private int ySize = 770;
+	private int xSize = 700;					//width of gui
+	private int ySize = 770;					//height of gui
 	public ClueBoardGUI(){
 		Board board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
 		setSize(new Dimension(xSize,ySize));

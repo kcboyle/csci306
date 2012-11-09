@@ -4,6 +4,10 @@
  */
 package main;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public abstract class Player {
@@ -14,7 +18,31 @@ public abstract class Player {
 	private int startCol;
 	private int targetLocation;
 	private int currentLocation;
+	final static public int size = 30;
+	public static final int diameter = 29;
 	
+	
+	//draws a player. used in the gui
+	public void draw(Graphics g) {
+		Graphics2D player = (Graphics2D) g;
+		player.setColor(nonStringPlayerColor(color));
+		player.fillOval(startRow*size,  startCol*size, diameter,  diameter);
+		player.setColor(Color.BLACK);
+		player.drawOval(startRow*size, startCol*size, diameter, diameter);
+	}
+	
+	//converts the color read from the file to a color in the Graphics color library
+	private Color nonStringPlayerColor(String color2) {
+		Color color;
+		try {     
+			Field field = Class.forName("java.awt.Color").getField(color2.trim());     
+			color = (Color)field.get(null); } 
+		catch (Exception e) {  
+			color = null; 
+		}
+		return color;
+	}
+
 	public int getTargetLocation() {
 		return targetLocation;
 	}

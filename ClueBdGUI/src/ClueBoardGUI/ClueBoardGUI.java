@@ -20,15 +20,16 @@ public class ClueBoardGUI extends JFrame {
 	private int dx, dy;
 	private int xSize = 700;						//width of gui
 	private int ySize = 670;						//height of gui
-	DetectiveNotesGUI gui = new DetectiveNotesGUI();//detective notes
+	//DetectiveNotesGUI gui = new DetectiveNotesGUI();//detective notes
 	public ClueBoardGUI(){
 		Board board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
 		setSize(new Dimension(xSize,ySize));						//size of gui
 		setTitle("Clue Game");
-		drawBoard = new DrawBoard(board, xSize, ySize-70);		//offset of 115 to accomodate the east panel and bottom of gui
+		//drawBoard = new DrawBoard(board, xSize, ySize-70);		//offset of 115 to accomodate the east panel and bottom of gui
 		// paintComponent will automatically be 
 		// called 1 time
-		add(drawBoard, BorderLayout.CENTER);
+		//add(drawBoard, BorderLayout.CENTER);
+		add(board, BorderLayout.CENTER);
 		/**JPanel a = new JPanel();					//dummy panel for use when we make BUTTONS!!
 		a.setPreferredSize(new Dimension(100, ySize));
 		add(a, BorderLayout.EAST);*/
@@ -58,8 +59,8 @@ public class ClueBoardGUI extends JFrame {
 		JMenuItem item = new JMenuItem("Detective Notes");
 		class MenuItemListener implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
-				gui.setVisible(true);
-				gui.setResizable(false);
+				//gui.setVisible(true);
+				//gui.setResizable(false);
 			}
 		}
 		item.addActionListener(new MenuItemListener());
@@ -87,7 +88,7 @@ public class ClueBoardGUI extends JFrame {
 		
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
-		gui.setResizable(false);
+		//gui.setResizable(false);
 		// This will draw the new location of player
 		//gui.updatePlayer(100, 100);
 

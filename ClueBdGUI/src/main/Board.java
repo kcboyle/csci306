@@ -1,4 +1,5 @@
 package main;
+import java.awt.Graphics;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.HashSet;
 
+import javax.swing.*;
 import javax.xml.stream.events.StartDocument;
 
 import main.Card.CardType;
@@ -18,7 +20,7 @@ import main.Card.CardType;
  * @author: Lars Walen
  */
 
-public class Board {
+public class Board extends JPanel {
 
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
 	private Map<Character, String> rooms = new HashMap<Character, String>();
@@ -50,6 +52,8 @@ public class Board {
 	//Who's Turn is it?? hmmmmm
 	private Player currentPlayer = self;							//human should start the game. default
 	
+	Graphics g;						//for use in drawing players and cells
+	
 	/**
 	 * Creates board given filenames of legend file and board config file
 	 * @param legendFilename
@@ -66,6 +70,25 @@ public class Board {
 		targets = new HashSet<Integer>();
 		//dealCards();  //Shuffles cards and causes loadCards to fail. Use in GUI for actual gameplay
 		calcAdjacencies();
+	}
+	
+	public void paintComponent(Graphics g) {
+		int i = 0;
+		//draw the board
+		while (i < cells.size()) {
+			for (int j = 0; j < numColumns; ++j) {
+				for (int k = 0; k < numColumns; ++k) {
+					cells.get(i).draw(g, k, j);
+					++i;
+				}
+			}
+		}
+		//draw the human player
+		self.draw(g);
+		//draw the computer player
+		for (int l = 0; l < compPlayers.size(); ++l) {
+			compPlayers.get(l).draw(g);
+		}
 	}
 
 	/**

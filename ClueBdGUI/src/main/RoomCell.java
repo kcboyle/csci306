@@ -1,8 +1,13 @@
 package main;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+
 public class RoomCell extends BoardCell {
 	private DoorDirection doorDirection;
 	private boolean isName = false;
+	final static public int DOOR_THICKNESS = 3;			//thickness of door rectangle
 	
 	public RoomCell(String cellType) {
 		super();
@@ -47,8 +52,37 @@ public class RoomCell extends BoardCell {
 		}
 	}
 	
-	//Draw the gui
-	public void draw() {
+	//Draw the room cell
+	public void draw(Graphics g, int row, int col) {
+		Graphics2D room = (Graphics2D) g;
+		//color the closet differently 
+		if (getInitial() == 'X') {
+			room.setColor(Color.RED);
+			room.fillRect(row*size, col*size, size, size);
+			
+		} else {			//draw a normal room cell
+			room.setColor(Color.GRAY);
+			room.fillRect(row*size, col*size, size, size);
+		}
+		//draw doorways
+		if (doorDirection == DoorDirection.LEFT)  {
+			//draws a vertical doorway to left
+			room.setColor(Color.WHITE);
+			room.fillRect(row*size, col*size, DOOR_THICKNESS, size);
+			//g.drawLine(x1, y1, x1, y2*size);
+		}  else if (doorDirection == DoorDirection.RIGHT) {
+			//draws a vertical doorway to the right
+			room.setColor(Color.WHITE);
+			room.fillRect(row*size + size-2, col*size, DOOR_THICKNESS, size);
+		} else if(doorDirection == DoorDirection.UP){
+			//draws a horizontal doorway for the upward entry
+			room.setColor(Color.WHITE);
+			room.fillRect(row*size, col*size, size, DOOR_THICKNESS);
+		} else if(doorDirection == DoorDirection.DOWN) {
+			//draws a horizontal doorway for downward entry
+			room.setColor(Color.WHITE);
+			room.fillRect(row*size, col*size +size-2, size, DOOR_THICKNESS);
+		}
 		
 	}
 

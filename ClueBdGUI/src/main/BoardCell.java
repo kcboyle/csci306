@@ -1,9 +1,12 @@
 package main;
 
+import java.awt.Graphics;
+
 public abstract class BoardCell {
 	protected char cellType;
 	protected int row;
 	protected int col;
+	final static public int size = 30;
 	
 	public boolean isWalkway() {
 		if( cellType == 'W' ) {
@@ -55,6 +58,8 @@ public abstract class BoardCell {
 			return false;
 		return true;
 	}
+
+	abstract void draw(Graphics g, int row, int col);
 
 
 }

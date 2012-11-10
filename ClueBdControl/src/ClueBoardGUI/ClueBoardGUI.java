@@ -25,6 +25,10 @@ public class ClueBoardGUI extends JFrame {
 		setSize(new Dimension(xSize,ySize));						//size of gui
 		setTitle("Clue Game");
 		add(board, BorderLayout.CENTER);
+		EastPanel east = new EastPanel();
+		add(east, BorderLayout.EAST);
+		SouthPanel south = new SouthPanel();
+		add(south, BorderLayout.SOUTH);
 		//menu
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);

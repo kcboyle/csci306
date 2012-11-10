@@ -17,12 +17,6 @@ public class WalkwayCell extends BoardCell{
 		walkway.fillRect(row*size, col*size, size, size);
 		walkway.setColor(Color.BLACK);
 		walkway.drawRect(row*size, col*size, size, size);
-		/**float thickness = 1;
-		Stroke oldStroke = walkway.getStroke();
-		walkway.setStroke(new BasicStroke(thickness));
-		walkway.drawRect(row*size, col*size, size, size);
-		walkway.setStroke(oldStroke);*/
-		
 	}
 	
 	public boolean isWalkway() {

@@ -16,7 +16,7 @@ import DetectiveNotesGUI.DetectiveNotesGUI;
 import main.Board;
 
 public class ClueBoardGUI extends JFrame {
-	private DrawBoard drawBoard;
+	//private DrawBoard drawBoard;
 	private int dx, dy;
 	private int xSize = 700;						//width of gui
 	private int ySize = 670;						//height of gui
@@ -26,13 +26,8 @@ public class ClueBoardGUI extends JFrame {
 		setSize(new Dimension(xSize,ySize));						//size of gui
 		setTitle("Clue Game");
 		//drawBoard = new DrawBoard(board, xSize, ySize-70);		//offset of 115 to accomodate the east panel and bottom of gui
-		// paintComponent will automatically be 
-		// called 1 time
-		//add(drawBoard, BorderLayout.CENTER);
+		//add(drawBoard, BorderLayout.CENTER);						//drawBoard eliminated in leiu of object-orientation
 		add(board, BorderLayout.CENTER);
-		/**JPanel a = new JPanel();					//dummy panel for use when we make BUTTONS!!
-		a.setPreferredSize(new Dimension(100, ySize));
-		add(a, BorderLayout.EAST);*/
 		//menu
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);

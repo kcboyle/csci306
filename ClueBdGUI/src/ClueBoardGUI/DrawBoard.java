@@ -1,8 +1,11 @@
 /**
  * Kira Combs
  * Maria Deslis
+ * Drawing implementation that utilizes a for loop rather than object orientation
+ * this file was severely changed with object orientation, and we decided not to 
+ * use dynamically allocated square sizes with this new implementation
  */
-package ClueBoardGUI;
+/**package ClueBoardGUI;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -159,4 +162,4 @@ public class DrawBoard extends JPanel {
 		repaint();
 	}
 
-}
+}*/

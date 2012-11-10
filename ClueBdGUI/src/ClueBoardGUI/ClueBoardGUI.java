@@ -20,7 +20,7 @@ public class ClueBoardGUI extends JFrame {
 	private int dx, dy;
 	private int xSize = 700;						//width of gui
 	private int ySize = 670;						//height of gui
-	//DetectiveNotesGUI gui = new DetectiveNotesGUI();//detective notes
+	DetectiveNotesGUI gui = new DetectiveNotesGUI();//detective notes
 	public ClueBoardGUI(){
 		Board board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
 		setSize(new Dimension(xSize,ySize));						//size of gui
@@ -59,8 +59,8 @@ public class ClueBoardGUI extends JFrame {
 		JMenuItem item = new JMenuItem("Detective Notes");
 		class MenuItemListener implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
-				//gui.setVisible(true);
-				//gui.setResizable(false);
+				gui.setVisible(true);
+				gui.setResizable(false);
 			}
 		}
 		item.addActionListener(new MenuItemListener());

@@ -6,7 +6,7 @@ public abstract class BoardCell {
 	protected char cellType;
 	protected int row;
 	protected int col;
-	final static public int size = 30;
+	final static public int size = 26;
 	
 	public boolean isWalkway() {
 		if( cellType == 'W' ) {

@@ -14,33 +14,33 @@ public abstract class Player {
 	private String name;
 	private ArrayList<Card> cards = new ArrayList<Card>();
 	private String color;
-	private int startRow;
-	private int startCol;
+	private int startRow;							//y location
+	private int startCol;							//x location
 	private int targetLocation;
 	private int currentLocation;
-	final static public int size = 30;
-	public static final int diameter = 29;
+	final static public int size = 26;
+	public static final int diameter = 25;
 	
 	
 	//draws a player. used in the gui
 	public void draw(Graphics g) {
 		Graphics2D player = (Graphics2D) g;
-		player.setColor(nonStringPlayerColor(color));
-		player.fillOval(startRow*size,  startCol*size, diameter,  diameter);
+		player.setColor(convertPlayerColor(color));
+		player.fillOval(startCol*size,  startRow*size, diameter,  diameter);
 		player.setColor(Color.BLACK);
-		player.drawOval(startRow*size, startCol*size, diameter, diameter);
+		player.drawOval(startCol*size, startRow*size, diameter, diameter);
 	}
 	
 	//converts the color read from the file to a color in the Graphics color library
-	private Color nonStringPlayerColor(String color2) {
-		Color color;
+	private Color convertPlayerColor(String strColor) {
+		Color Ccolor;
 		try {     
-			Field field = Class.forName("java.awt.Color").getField(color2.trim());     
-			color = (Color)field.get(null); } 
+			Field field = Class.forName("java.awt.Color").getField(strColor.trim());     
+			Ccolor = (Color)field.get(null); } 
 		catch (Exception e) {  
-			color = null; 
+			Ccolor = Color.CYAN; //if the color is not recognized by the library, make the player cyan
 		}
-		return color;
+		return Ccolor;
 	}
 
 	public int getTargetLocation() {

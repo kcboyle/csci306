@@ -1,8 +1,10 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Map;
 
 public class RoomCell extends BoardCell {
 	private DoorDirection doorDirection;
@@ -82,8 +84,16 @@ public class RoomCell extends BoardCell {
 			//draws a horizontal doorway for downward entry
 			room.setColor(Color.WHITE);
 			room.fillRect(row*size, col*size +size-2, size, DOOR_THICKNESS);
+		}	
+		//write the room name in the appropriate room
+		if (isName()) {
+			g.setColor(Color.BLUE);
+			String key = Character.toString(getInitial());
+			g.setFont(new Font("Chiller", Font.BOLD, 18));
+			g.drawString(key, row*size, col*size);
+			
 		}
-		
+	
 	}
 
 	public DoorDirection getDoorDirection() {

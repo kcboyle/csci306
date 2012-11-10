@@ -3,6 +3,7 @@
  * Maria Deslis
  */
 package ClueBoardGUI;
+
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.*;
@@ -12,23 +13,34 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
 import DetectiveNotesGUI.DetectiveNotesGUI;
+import DetectiveNotesGUI.PeopleSeenPanel;
 
 import main.Board;
 
 public class ClueBoardGUI extends JFrame {
 	private int dx, dy;
-	private int xSize = 700;						//width of gui
-	private int ySize = 670;						//height of gui
+	private int xSize = 800;						//width of gui
+	private int ySize = 650;						//height of gui
 	DetectiveNotesGUI gui = new DetectiveNotesGUI();//detective notes
 	public ClueBoardGUI(){
 		Board board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
 		setSize(new Dimension(xSize,ySize));						//size of gui
 		setTitle("Clue Game");
 		add(board, BorderLayout.CENTER);
-		EastPanel east = new EastPanel();
+		
+		//east panel will display the cards in player's hand
+		JPanel east = new JPanel();
+		east.setBorder(new TitledBorder (new EtchedBorder(), "My Cards"));
+		east.setLayout(new GridLayout(1,0));
+		InHandPanel iPanel = new InHandPanel(board);
+		east.add(iPanel);
+		east.setPreferredSize(new Dimension(150, 600));
 		add(east, BorderLayout.EAST);
-		SouthPanel south = new SouthPanel();
-		add(south, BorderLayout.SOUTH);
+		
+		//west panel will hold accusation, turn, die roll, etc
+		WestPanel west = new WestPanel(board);
+		west.setPreferredSize(new Dimension(250, 600));
+		add(west, BorderLayout.WEST);
 		//menu
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);

@@ -1,4 +1,4 @@
-C, Conservatory
+C, Conser.
 K, Kitchen
 B, Ballroom
 R, Billiard room

@@ -68,7 +68,7 @@ public class Board extends JPanel {
 		visited = new boolean[numRows * numColumns];
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<Integer>();
-		//dealCards();  //Shuffles cards and causes loadCards to fail. Use in GUI for actual gameplay
+		dealCards();  //Shuffles cards and causes loadCards to fail. Use in GUI for actual gameplay
 		calcAdjacencies();
 	}
 	

@@ -3,6 +3,7 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Map;
 
 public class WalkwayCell extends BoardCell{
 	
@@ -10,7 +11,7 @@ public class WalkwayCell extends BoardCell{
 		super();
 		cellType = 'W';
 	}
-	public void draw(Graphics g, int row, int col) {
+	public void draw(Graphics g, int row, int col, Map<Character, String> rooms) {
 		Graphics2D walkway = (Graphics2D) g;
 		//draws a walkway cell
 		walkway.setColor(Color.PINK);

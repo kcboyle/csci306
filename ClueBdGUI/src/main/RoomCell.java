@@ -55,7 +55,7 @@ public class RoomCell extends BoardCell {
 	}
 	
 	//Draw the room cell
-	public void draw(Graphics g, int row, int col) {
+	public void draw(Graphics g, int row, int col, Map<Character, String> rooms) {
 		Graphics2D room = (Graphics2D) g;
 		//color the closet differently 
 		if (getInitial() == 'X') {
@@ -87,10 +87,10 @@ public class RoomCell extends BoardCell {
 		}	
 		//write the room name in the appropriate room
 		if (isName()) {
-			g.setColor(Color.BLUE);
-			String key = Character.toString(getInitial());
-			g.setFont(new Font("Chiller", Font.BOLD, 18));
-			g.drawString(key, row*size, col*size);
+			room.setColor(Color.ORANGE);
+			char key = getInitial();
+			room.setFont(new Font("Chiller", Font.BOLD, 18));
+			room.drawString(rooms.get(key), row*size, col*size);
 			
 		}
 	

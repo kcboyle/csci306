@@ -1,6 +1,6 @@
 K,K,K,W,W,D,D,D,W,W,W,O,O,O,W
-K,KN,K,W,W,D,D,D,W,W,W,OL,O,O,W
-K,KD,K,W,W,DL,DN,D,W,W,W,O,ON,O,W
+K,KN,K,W,W,DN,D,D,W,W,W,OL,O,O,W
+K,KD,K,W,W,DL,D,D,W,W,W,O,ON,O,W
 W,W,W,W,W,D,D,D,W,X,X,X,O,O,W
 W,W,W,W,W,D,D,D,W,X,X,X,O,O,W
 W,W,W,W,W,W,W,W,W,X,X,X,O,O,W

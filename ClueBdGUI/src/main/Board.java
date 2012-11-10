@@ -78,7 +78,7 @@ public class Board extends JPanel {
 		while (i < cells.size()) {
 			for (int j = 0; j < numRows; ++j) {
 				for (int k = 0; k < numColumns; ++k) {
-					cells.get(i).draw(g, k, j);
+					cells.get(i).draw(g, k, j, rooms);
 					++i;
 				}
 			}

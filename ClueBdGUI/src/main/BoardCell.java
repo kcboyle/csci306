@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Graphics;
+import java.util.Map;
 
 public abstract class BoardCell {
 	protected char cellType;
@@ -59,7 +60,7 @@ public abstract class BoardCell {
 		return true;
 	}
 
-	abstract void draw(Graphics g, int row, int col);
+	abstract void draw(Graphics g, int row, int col, Map<Character, String> rooms);
 
 
 }

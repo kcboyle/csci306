@@ -39,6 +39,8 @@ public class ClueBoardGUI extends JFrame {
 		
 		//west panel will hold accusation, turn, die roll, etc
 		WestPanel west = new WestPanel(board);
+		west.setBorder(new TitledBorder (new EtchedBorder()));
+		west.setLayout(new GridLayout(6,0));
 		west.setPreferredSize(new Dimension(250, 600));
 		add(west, BorderLayout.WEST);
 		//menu

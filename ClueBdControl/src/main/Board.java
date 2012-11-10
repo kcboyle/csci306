@@ -54,6 +54,8 @@ public class Board extends JPanel {
 	
 	Graphics g;						//for use in drawing players and cells
 	
+	int diceRoll;					//for use in gameplay
+
 	/**
 	 * Creates board given filenames of legend file and board config file
 	 * @param legendFilename
@@ -70,6 +72,12 @@ public class Board extends JPanel {
 		targets = new HashSet<Integer>();
 		dealCards();  //Shuffles cards and causes loadCards to fail. Use in GUI for actual gameplay
 		calcAdjacencies();
+		diceRoll = 0; 			//default dice roll at start
+		ArrayList<String> defaultList = new ArrayList<String>(); 
+		defaultList.add("person");
+		defaultList.add("room");
+		defaultList.add("weapon");
+		setSuggestions(defaultList);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -392,6 +400,7 @@ public class Board extends JPanel {
 			}
 			counter--;
 		}
+		//return "null";
 		return null;
 	}
 
@@ -504,5 +513,12 @@ public class Board extends JPanel {
 	}
 	public BoardCell getCellAt(int i) {
 		return cells.get(i);
+	}
+	public int getDiceRoll() {
+		return diceRoll;
+	}
+
+	public void setDiceRoll(int diceRoll) {
+		this.diceRoll = diceRoll;
 	}
 }

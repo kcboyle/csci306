@@ -14,8 +14,8 @@ public abstract class Player {
 	private String name;
 	private ArrayList<Card> cards = new ArrayList<Card>();
 	private String color;
-	private int startRow;							//y location
-	private int startCol;							//x location
+	private int row;							//y location
+	private int col;							//x location
 	private int targetLocation;
 	private int currentLocation;
 	final static public int size = 26;
@@ -26,9 +26,9 @@ public abstract class Player {
 	public void draw(Graphics g) {
 		Graphics2D player = (Graphics2D) g;
 		player.setColor(convertPlayerColor(color));
-		player.fillOval(startCol*size,  startRow*size, diameter,  diameter);
+		player.fillOval(col*size,  row*size, diameter,  diameter);
 		player.setColor(Color.BLACK);
-		player.drawOval(startCol*size, startRow*size, diameter, diameter);
+		player.drawOval(col*size, row*size, diameter, diameter);
 	}
 	
 	//converts the color read from the file to a color in the Graphics color library
@@ -55,17 +55,17 @@ public abstract class Player {
 	public void setColor(String color) {
 		this.color = color;
 	}
-	public int getStartRow() {
-		return startRow;
+	public int getRow() {
+		return row;
 	}
-	public void setStartRow(int startRow) {
-		this.startRow = startRow;
+	public void setRow(int row) {
+		this.row = row;
 	}
-	public int getStartCol() {
-		return startCol;
+	public int getCol() {
+		return col;
 	}
-	public void setStartCol(int startCol) {
-		this.startCol = startCol;
+	public void setCol(int col) {
+		this.col = col;
 	}
 	public String getName() {
 		return name;

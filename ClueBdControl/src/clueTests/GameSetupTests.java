@@ -27,33 +27,33 @@ public class GameSetupTests {
 		//Test the human player		
 		Assert.assertEquals("Gandalf", board.getSelf().getName());
 		Assert.assertEquals("White", board.getSelf().getColor());
-		Assert.assertEquals(6, board.getSelf().getStartRow());
-		Assert.assertEquals(8, board.getSelf().getStartCol());
+		Assert.assertEquals(6, board.getSelf().getRow());
+		Assert.assertEquals(8, board.getSelf().getCol());
 		//Test First Computer Player
 		Assert.assertEquals("Rose Tyler", board.getCompPlayers().get(0).getName());
 		Assert.assertEquals("Purple", board.getCompPlayers().get(0).getColor());
-		Assert.assertEquals(3, board.getCompPlayers().get(0).getStartRow());
-		Assert.assertEquals(8, board.getCompPlayers().get(0).getStartCol());
+		Assert.assertEquals(3, board.getCompPlayers().get(0).getRow());
+		Assert.assertEquals(8, board.getCompPlayers().get(0).getCol());
 		//Test Second Computer Player
 		Assert.assertEquals("Donna Noble", board.getCompPlayers().get(1).getName());
 		Assert.assertEquals("Red", board.getCompPlayers().get(1).getColor());
-		Assert.assertEquals(4, board.getCompPlayers().get(1).getStartRow());
-		Assert.assertEquals(8, board.getCompPlayers().get(1).getStartCol());
+		Assert.assertEquals(4, board.getCompPlayers().get(1).getRow());
+		Assert.assertEquals(8, board.getCompPlayers().get(1).getCol());
 		//Test Third Computer Player
 		Assert.assertEquals("Daniel Jackson", board.getCompPlayers().get(2).getName());
 		Assert.assertEquals("Green", board.getCompPlayers().get(2).getColor());
-		Assert.assertEquals(5, board.getCompPlayers().get(2).getStartRow());
-		Assert.assertEquals(8, board.getCompPlayers().get(2).getStartCol());
+		Assert.assertEquals(5, board.getCompPlayers().get(2).getRow());
+		Assert.assertEquals(8, board.getCompPlayers().get(2).getCol());
 		//Test Fourth Computer Player --last in the file
 		Assert.assertEquals("Jack O'Neill", board.getCompPlayers().get(3).getName());
 		Assert.assertEquals("Blue", board.getCompPlayers().get(3).getColor());
-		Assert.assertEquals(7, board.getCompPlayers().get(3).getStartRow());
-		Assert.assertEquals(8, board.getCompPlayers().get(3).getStartCol());
+		Assert.assertEquals(7, board.getCompPlayers().get(3).getRow());
+		Assert.assertEquals(8, board.getCompPlayers().get(3).getCol());
 		//Test Fifth Computer Player --last in the file
 		Assert.assertEquals("Malcolm Reynolds", board.getCompPlayers().get(4).getName());
 		Assert.assertEquals("Black", board.getCompPlayers().get(4).getColor());
-		Assert.assertEquals(8, board.getCompPlayers().get(4).getStartRow());
-		Assert.assertEquals(8, board.getCompPlayers().get(4).getStartCol());
+		Assert.assertEquals(8, board.getCompPlayers().get(4).getRow());
+		Assert.assertEquals(8, board.getCompPlayers().get(4).getCol());
 	}
 
 	@Test

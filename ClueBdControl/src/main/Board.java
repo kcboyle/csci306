@@ -1,5 +1,7 @@
 package main;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import java.util.Scanner;
 import java.util.HashSet;
 
 import javax.swing.*;
+import javax.swing.text.html.HTMLDocument.Iterator;
 import javax.xml.stream.events.StartDocument;
 
 import main.Card.CardType;
@@ -75,8 +78,9 @@ public class Board extends JPanel {
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<Integer>();
 		calcAdjacencies();
-		currentPlayer = allPlayers.get(0);
-		currentPlayerIndex = 0;
+		currentPlayerIndex = allPlayers.size()-1;
+		currentPlayer = allPlayers.get(currentPlayerIndex);
+
 		ArrayList<String> defaultList = new ArrayList<String>(); 
 		defaultList.add("person");
 		defaultList.add("room");
@@ -97,12 +101,22 @@ public class Board extends JPanel {
 				}
 			}
 		}
+		java.util.Iterator<Integer> it = targets.iterator();
+		int index;
+		int coord[];
+		while (it.hasNext()) {
+			index = it.next();
+			coord = calcCoords(index);
+			System.out.println("row " + coord[0] + "col" + coord[1]);
+			cells.get(index).highlight(g, coord[1], coord[0]);
+		}
 		//draw the human player
 		self.draw(g);
 		//draw the computer player
 		for (int l = 0; l < compPlayers.size(); ++l) {
 			compPlayers.get(l).draw(g);
 		}
+
 	}
 
 	/**
@@ -216,7 +230,8 @@ public class Board extends JPanel {
 			comp.setColor(l[1]);
 			comp.setRow(Integer.parseInt(l[2]));
 			comp.setCol(Integer.parseInt(l[3]));
-			comp.setCurrentLocation(calcIndex(Integer.parseInt(l[3]), Integer.parseInt(l[2])));
+			comp.setCurrentLocation(calcIndex(comp.getCol(), comp.getRow()));
+			System.out.println(comp.getCol() + " " + comp.getRow());
 			compPlayers.add(comp);
 			allPlayers.add(comp);
 		}
@@ -562,14 +577,15 @@ public class Board extends JPanel {
 	public void nextMove() {
 		rollDice();
 		calcTargets(getCurrentPlayer().getCurrentLocation(), getDiceRoll());
+		repaint();
 		if(currentPlayerIndex == allPlayers.size()-1) {
-			currentPlayer = allPlayers.get(0);
 			currentPlayerIndex = 0;
-		} else {
+			currentPlayer = allPlayers.get(0);
+		} else  {
 			currentPlayerIndex++;
 			currentPlayer = allPlayers.get(currentPlayerIndex);
 		}
-		repaint();
+
 	}
 
 	public void rollDice() {

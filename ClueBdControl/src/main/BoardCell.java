@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Map;
 
@@ -28,6 +29,11 @@ public abstract class BoardCell {
 	public abstract boolean isDoorway();
 	
 	public void draw() {}
+	
+	public void highlight(Graphics g, int row2, int col2) {
+		g.setColor(Color.CYAN);
+		g.fillRect(row2*size, col2*size, size, size);
+	}
 	
 	/*
 	 * Getters

@@ -10,13 +10,12 @@ import java.util.Random;
 import java.util.Set;
 
 public class ComputerPlayer extends Player {
-	private char lastRoomVisited;	//for use with GUI
 	private ArrayList<String> cardsSeen;
 	
 	public ComputerPlayer() {
 		ArrayList<String> seen = new ArrayList<String>();
 		setCardsSeen(seen);
-		lastRoomVisited = 'X';
+		setLastRoomVisited('X');
 	}
 	
 	public BoardCell pickLocation(Set<BoardCell> targets) {
@@ -77,15 +76,7 @@ public class ComputerPlayer extends Player {
 	public void updateSeen(String seen) {
 		cardsSeen.add(seen);
 	}
-	
-	//for use with GUI
-	public char getLastRoomVisited() {
-		return lastRoomVisited;
-	}
-	//for use with GUI
-	public void setLastRoomVisited(char lastRoomVisited) {
-		this.lastRoomVisited = lastRoomVisited;
-	}
+
 	public ArrayList<String> getCardsSeen() {
 		return cardsSeen;
 	}

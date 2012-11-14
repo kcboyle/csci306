@@ -15,6 +15,8 @@ import javax.swing.*;
 import javax.xml.stream.events.StartDocument;
 
 import main.Card.CardType;
+
+
 /**
  * @author: Craig Carlson
  * @author: Lars Walen
@@ -30,6 +32,7 @@ public class Board extends JPanel {
 	private ArrayList<String> answers = new ArrayList<String>();					//stores 3 strings that will be the game answer
 	private ArrayList<String> accusations = new ArrayList<String>();				//stores 3 strings that will be a person's accusation 
 	private ArrayList<String> suggestions = new ArrayList<String>();				//stores 3 strings that will be a person's suggestion
+	private ArrayList<Player> allPlayers = new ArrayList<Player>();					//stores all players
 		
 	private HumanPlayer self = new HumanPlayer();
 	
@@ -50,7 +53,8 @@ public class Board extends JPanel {
 	private boolean[] visited;
 
 	//Who's Turn is it?? hmmmmm
-	private Player currentPlayer = self;							//human should start the game. default
+	private Player currentPlayer;							//human should start the game. default
+	private int currentPlayerIndex;							//index in allPlayers array
 	
 	Graphics g;						//for use in drawing players and cells
 	
@@ -71,13 +75,15 @@ public class Board extends JPanel {
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<Integer>();
 		calcAdjacencies();
-		diceRoll = 0; 			//default dice roll at start
+		currentPlayer = allPlayers.get(0);
+		currentPlayerIndex = 0;
 		ArrayList<String> defaultList = new ArrayList<String>(); 
 		defaultList.add("person");
 		defaultList.add("room");
 		defaultList.add("weapon");
 		setSuggestions(defaultList);
 		dealCards();  //Shuffles cards and causes loadCards to fail. Use in GUI for actual gameplay
+		rollDice();
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -200,6 +206,7 @@ public class Board extends JPanel {
 		self.setRow(Integer.parseInt(line[2]));
 		self.setCol(Integer.parseInt(line[3]));
 		self.setCurrentLocation(calcIndex(Integer.parseInt(line[3]), Integer.parseInt(line[2])));
+		allPlayers.add(self);
 		while( scan.hasNextLine() ) {
 			playersLine = scan.nextLine();
 			String[] l;
@@ -211,6 +218,7 @@ public class Board extends JPanel {
 			comp.setCol(Integer.parseInt(l[3]));
 			comp.setCurrentLocation(calcIndex(Integer.parseInt(l[3]), Integer.parseInt(l[2])));
 			compPlayers.add(comp);
+			allPlayers.add(comp);
 		}
 		scan.close();
 	} 
@@ -547,8 +555,26 @@ public class Board extends JPanel {
 	public int getDiceRoll() {
 		return diceRoll;
 	}
-
 	public void setDiceRoll(int diceRoll) {
 		this.diceRoll = diceRoll;
+	}
+
+	public void nextMove() {
+		rollDice();
+		calcTargets(getCurrentPlayer().getCurrentLocation(), getDiceRoll());
+		if(currentPlayerIndex == allPlayers.size()-1) {
+			currentPlayer = allPlayers.get(0);
+			currentPlayerIndex = 0;
+		} else {
+			currentPlayerIndex++;
+			currentPlayer = allPlayers.get(currentPlayerIndex);
+		}
+		repaint();
+	}
+
+	public void rollDice() {
+		Random roll = new Random();
+		int newRoll = roll.nextInt(6);
+		setDiceRoll(newRoll + 1);
 	}
 }

@@ -14,7 +14,7 @@ public class RoomGuessPanel extends JPanel{
 		private JComboBox room;
 		RoomGuessPanel(Board board) {
 			this.board = board;
-			setBorder(new TitledBorder (new EtchedBorder(), "Weapon Guess"));
+			setBorder(new TitledBorder (new EtchedBorder(), "Room Guess"));
 			setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS)); 		//makes big button
 			room = createWeaponCombo();
 			add(room);

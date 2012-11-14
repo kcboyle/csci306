@@ -20,6 +20,7 @@ public abstract class Player {
 	private int currentLocation;
 	final static public int size = 26;
 	public static final int diameter = 25;
+	private char lastRoomVisited;	//for use with GUI
 	
 	
 	//draws a player. used in the gui
@@ -87,6 +88,14 @@ public abstract class Player {
 	}
 	public void setCurrentLocation(int currentLocation) {
 		this.currentLocation = currentLocation;
+	}
+	//for use with GUI
+	public char getLastRoomVisited() {
+		return lastRoomVisited;
+	}
+	//for use with GUI
+	public void setLastRoomVisited(char lastRoomVisited) {
+		this.lastRoomVisited = lastRoomVisited;
 	}
 	
 }

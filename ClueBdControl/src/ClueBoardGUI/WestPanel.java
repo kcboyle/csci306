@@ -1,5 +1,4 @@
 package ClueBoardGUI;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -10,25 +9,30 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import DetectiveNotesGUI.makeAccusation;
+
 import main.Board;
 
 public class WestPanel extends JPanel{
+	Board board;
+	JPanel diceRollPanel = new JPanel();
+	JLabel diceRoll = new JLabel();
+	JLabel currentPlayer = new JLabel();
 	public WestPanel(Board board) {
+		this.board = board;
 		setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		//displays the current player, lots of fluff in looks...
 		JPanel currentPlayerPanel = new JPanel();
 		currentPlayerPanel.setBorder(new TitledBorder (new EtchedBorder(), "Current Player"));
-		JLabel currentPlayer = new JLabel(board.getCurrentPlayer().getName());
 		currentPlayer.setFont(new Font("Chiller", Font.BOLD, 25));
+		resetCurrentPlayer();
 		currentPlayerPanel.add(currentPlayer);
 		add(currentPlayerPanel);
 		
 		//displays the current dice roll
-		JPanel diceRollPanel = new JPanel();
-		String die = Integer.toString(board.getDiceRoll());
 		diceRollPanel.setBorder(new TitledBorder (new EtchedBorder(), "Die"));
-		JLabel diceRoll = new JLabel("Current Roll: " + die);
 		diceRoll.setFont(new Font("Chiller", Font.BOLD, 25));
+		resetDice();
 		diceRollPanel.add(diceRoll);
 		add(diceRollPanel);
 		
@@ -67,16 +71,31 @@ public class WestPanel extends JPanel{
 		
 		
 	}
+	public void resetDice() {
+		diceRoll.setText("Current Roll: " + board.getDiceRoll());
+	}
+	public void resetCurrentPlayer() {
+		currentPlayer.setText(board.getCurrentPlayer().getName());
+	}
+	
+	//creating makeAccusationButton listener
+	private class AccusationButtonListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			//makeAccusation in humanGUI package
+			makeAccusation humanAccusation = new makeAccusation(board);
+			humanAccusation.setVisible(true); //accusation panel appears when button is clicked
+		}
+	}
+	
+	
 	//Player button listener for use to make the buttons work!! mwaha 
 	private class PlayerButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			board.nextMove();
+			System.out.println(board.getCurrentPlayer().getName());
+			resetDice();
+			resetCurrentPlayer();
 		}
 	}
-	//Accusation button listener
-		private class AccusationButtonListener implements ActionListener {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		}
 }

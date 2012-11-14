@@ -21,8 +21,8 @@ public class ClueBoardGUI extends JFrame {
 	private int dx, dy;
 	private int xSize = 800;						//width of gui
 	private int ySize = 650;						//height of gui
-	Board board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
-	DetectiveNotesGUI gui = new DetectiveNotesGUI(board);//detective notes
+	private static Board board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
+	private DetectiveNotesGUI gui = new DetectiveNotesGUI(board);//detective notes
 
 	public ClueBoardGUI(){
 		setSize(new Dimension(xSize,ySize));						//size of gui
@@ -96,10 +96,12 @@ public class ClueBoardGUI extends JFrame {
 	public static void main(String[] args) {
 		//Setting up basic items in JFrame
 		ClueBoardGUI gui = new ClueBoardGUI();
+		String playerName = board.getSelf().getName();
 		
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
 		gui.setResizable(false);
+		//JOptionPane.showMessageDialog(gui, "You are " + playerName + " the White, press Next Player to begin", "Welcome To Clue!", JOptionPane.INFORMATION_MESSAGE);
 		// This will draw the new location of player
 		//gui.updatePlayer(100, 100);
 

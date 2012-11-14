@@ -13,9 +13,7 @@ import main.Board;
 
 public class DetectiveNotesGUI extends JDialog{
 	//Basic GUI Setup
-	public DetectiveNotesGUI() {
-		//creates a board
-		Board board = new Board("roomLegend.txt", "config.txt", "players.csv", "cards.csv");
+	public DetectiveNotesGUI(Board board) {
 		
 		setSize(new Dimension(550,500));
 		setTitle("Detective Notes");

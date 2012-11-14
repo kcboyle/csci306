@@ -70,7 +70,6 @@ public class Board extends JPanel {
 		visited = new boolean[numRows * numColumns];
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<Integer>();
-		dealCards();  //Shuffles cards and causes loadCards to fail. Use in GUI for actual gameplay
 		calcAdjacencies();
 		diceRoll = 0; 			//default dice roll at start
 		ArrayList<String> defaultList = new ArrayList<String>(); 
@@ -78,6 +77,7 @@ public class Board extends JPanel {
 		defaultList.add("room");
 		defaultList.add("weapon");
 		setSuggestions(defaultList);
+		dealCards();  //Shuffles cards and causes loadCards to fail. Use in GUI for actual gameplay
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -197,8 +197,9 @@ public class Board extends JPanel {
 		String[] line = playersLine.split(", ");
 		self.setName(line[0]);
 		self.setColor(line[1]);
-		self.setStartRow(Integer.parseInt(line[2]));
-		self.setStartCol(Integer.parseInt(line[3]));
+		self.setRow(Integer.parseInt(line[2]));
+		self.setCol(Integer.parseInt(line[3]));
+		self.setCurrentLocation(calcIndex(Integer.parseInt(line[3]), Integer.parseInt(line[2])));
 		while( scan.hasNextLine() ) {
 			playersLine = scan.nextLine();
 			String[] l;
@@ -206,8 +207,9 @@ public class Board extends JPanel {
 			ComputerPlayer comp = new ComputerPlayer();
 			comp.setName(l[0]);
 			comp.setColor(l[1]);
-			comp.setStartRow(Integer.parseInt(l[2]));
-			comp.setStartCol(Integer.parseInt(l[3]));
+			comp.setRow(Integer.parseInt(l[2]));
+			comp.setCol(Integer.parseInt(l[3]));
+			comp.setCurrentLocation(calcIndex(Integer.parseInt(l[3]), Integer.parseInt(l[2])));
 			compPlayers.add(comp);
 		}
 		scan.close();
@@ -241,24 +243,52 @@ public class Board extends JPanel {
 	}
 	
 	public void dealCards() {
+		boolean personSet = false;
+		boolean roomSet = false;
+		boolean weaponSet = false;
+		
 		//takes the list of all cards and shuffles them into a new array for random distribution
+		Collections.shuffle(allCards);
+		
 		ArrayList<Card> c = new ArrayList<Card>();
+		ArrayList<String> a = new ArrayList<String>();
+
 		for (int j = 0; j < allCards.size(); j++) {
-			c.add(allCards.get(j));
+			if (allCards.get(j).getCardType() == CardType.PERSON && personSet == false) {
+				a.add(allCards.get(j).getName());
+				personSet = true;
+			} else if (allCards.get(j).getCardType() == CardType.ROOM && roomSet == false) {
+				a.add(allCards.get(j).getName());
+				roomSet = true;
+			} else if (allCards.get(j).getCardType() == CardType.WEAPON && weaponSet == false) {
+				a.add(allCards.get(j).getName());
+				weaponSet = true;
+			} else {
+				c.add(allCards.get(j));
+			}
 		}
+		setAnswers(a);
+
 		Collections.shuffle(c);
+		
 		for (int i = 0; i < c.size();) {
-			for (int j = 0; j < compPlayers.size(); j++) {
+			for (int j = 0; j < compPlayers.size() && i < c.size(); j++) {
 				compPlayers.get(j).addCards(c.get(i));
 				c.get(i).incTimesDealt();
 				compPlayers.get(j).updateSeen(c.get(i).getName());
 				numDealt++;
 				i++;
 			}
-			self.addCards(c.get(i));
-			c.get(i).incTimesDealt();
-			numDealt++;
-			i++;
+			if (i < c.size()) {
+				self.addCards(c.get(i));
+				//System.out.println(self.getCards());
+				c.get(i).incTimesDealt();
+				numDealt++;
+				i++;
+			}
+		}
+		for(int k = 0; k < 3; ++k) {
+			System.out.println(answers.get(k));
 		}
 	}
 
@@ -492,7 +522,7 @@ public class Board extends JPanel {
 	
 	public void setWon() {
 		//determines if a winner has occured by comparing accusation to answers
-		if (getAccusations().get(0).equals(getAnswers().get(0)) && getAccusations().get(1).equals(getAnswers().get(1)) && getAccusations().get(2).equals(getAnswers().get(2))) {
+		if (getAnswers().contains(getAccusations().get(0)) && getAnswers().contains(getAccusations().get(1)) && getAnswers().contains(getAccusations().get(2))) {
 			won = true;
 		} else {
 			won = false;

@@ -21,9 +21,10 @@ public class ClueBoardGUI extends JFrame {
 	private int dx, dy;
 	private int xSize = 800;						//width of gui
 	private int ySize = 650;						//height of gui
-	DetectiveNotesGUI gui = new DetectiveNotesGUI();//detective notes
+	Board board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
+	DetectiveNotesGUI gui = new DetectiveNotesGUI(board);//detective notes
+
 	public ClueBoardGUI(){
-		Board board = new Board("roomLegend.txt", "craigAndLarsConfig.txt", "players.csv", "cards.csv");
 		setSize(new Dimension(xSize,ySize));						//size of gui
 		setTitle("Clue Game");
 		add(board, BorderLayout.CENTER);

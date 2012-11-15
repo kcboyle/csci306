@@ -104,7 +104,7 @@ public class ClueBoardGUI extends JFrame {
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setVisible(true);
 		gui.setResizable(false);
-		//JOptionPane.showMessageDialog(gui, "You are " + playerName + " the White, press Next Player to begin", "Welcome To Clue!", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(gui, "You are " + playerName + " the White, press Next Player to begin", "Welcome To Clue!", JOptionPane.INFORMATION_MESSAGE);
 
 
 	}

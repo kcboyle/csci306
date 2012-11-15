@@ -14,7 +14,8 @@ public class WalkwayCell extends BoardCell{
 	public void draw(Graphics g, int row, int col, Map<Character, String> rooms) {
 		Graphics2D walkway = (Graphics2D) g;
 		//draws a walkway cell
-		walkway.setColor(Color.PINK);
+		Color color = new Color(145, 213, 161);
+		walkway.setColor(color);
 		walkway.fillRect(row*size, col*size, size, size);
 		walkway.setColor(Color.BLACK);
 		walkway.drawRect(row*size, col*size, size, size);

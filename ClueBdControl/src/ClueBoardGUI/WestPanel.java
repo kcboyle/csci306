@@ -9,7 +9,8 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import DetectiveNotesGUI.makeAccusation;
+import DetNotesGUI.makeAccusation;
+
 
 import main.Board;
 
@@ -81,9 +82,12 @@ public class WestPanel extends JPanel{
 	//creating makeAccusationButton listener
 	private class AccusationButtonListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			//makeAccusation in humanGUI package
-			makeAccusation humanAccusation = new makeAccusation(board);
-			humanAccusation.setVisible(true); //accusation panel appears when button is clicked
+			if (board.getCurrentPlayer() == board.getSelf()) {
+				DetNotesGUI.makeAccusation humanAccusation = new DetNotesGUI.makeAccusation(board);
+				humanAccusation.setVisible(true);
+			} else {
+				JOptionPane.showMessageDialog(null, "YOU SHALL NOT MOVE! *whacks*");
+			}
 		}
 	}
 	
@@ -92,10 +96,16 @@ public class WestPanel extends JPanel{
 	private class PlayerButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			board.nextMove();
-			System.out.println(board.getCurrentPlayer().getName());
-			resetDice();
-			resetCurrentPlayer();
+			if (board.getSubmissionComplete()) {
+				if (board.isPlayerSelTarget()) {
+					board.nextMove();
+					resetDice();
+					resetCurrentPlayer();
+					repaint();
+				} else {
+					JOptionPane.showMessageDialog(null, "At least move....exercise is good for you!");
+				}
+			} 
 		}
 	}
 }

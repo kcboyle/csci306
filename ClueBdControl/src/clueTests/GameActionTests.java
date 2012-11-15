@@ -321,7 +321,7 @@ public class GameActionTests {
 		Assert.assertTrue(board.getCompPlayers().get(0).getCardsSeen().contains(cardShown));
 	}
 	
-	@Test
+	/**@Test
 	public void suggestionTest() {
 		// Checks that a suggestion must always be made in the player's current room
 		//Suggestion has incorrect room
@@ -346,5 +346,5 @@ public class GameActionTests {
 		//Suggestion does not include seen card
 		board.setSuggestions(comp3.createSuggestion(card1.getName(), card3.getName(), "Mjolnir"));
 		Assert.assertEquals(null, board.getSuggestions());
-	}	
+	}*/	
 }

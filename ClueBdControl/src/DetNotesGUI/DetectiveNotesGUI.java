@@ -2,7 +2,7 @@
  * Kira Combs
  * Maria Deslis
  */
-package DetectiveNotesGUI;
+package DetNotesGUI;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.*;

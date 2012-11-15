@@ -115,6 +115,19 @@ public class BoardAdjTargetTestsCnL {
 		Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(18, 11))));
 		Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(18, 13))));
 		Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(17, 14))));
+		
+		board.calcTargets(board.calcIndex(8, 2), 4);
+		testList = board.getTargets();
+		Assert.assertEquals(7, testList.size());
+		Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(4,2))));
+		Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(12,2))));
+		Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(6, 4))));
+		//Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(6, 2))));
+		Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(5, 1))));
+		Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(11, 1))));
+		Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(11, 3))));
+		Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(5, 3))));
+		//Assert.assertTrue(testList.contains(board.getCellAt(board.calcIndex(10, 2))));
 	}
 	
 	@Test

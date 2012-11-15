@@ -9,6 +9,10 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.Set;
 
+import ClueBoardGUI.ClueBoardGUI;
+
+import main.Card.CardType;
+
 public class ComputerPlayer extends Player {
 	private ArrayList<String> cardsSeen;
 	
@@ -23,6 +27,7 @@ public class ComputerPlayer extends Player {
 		ArrayList<BoardCell> nonRooms = new ArrayList<BoardCell>();
 		Random rand = new Random();
 		for(BoardCell key : targets) {
+			System.out.println("key: " + key);
 			if (key.isRoom() && (key.getCellType() != getLastRoomVisited())) {
 				return key;
 			} else {
@@ -33,9 +38,43 @@ public class ComputerPlayer extends Player {
 		int randInt = rand.nextInt(nonRooms.size());
 		return nonRooms.get(randInt);
 	}
+	public void makeMove(Set<BoardCell> targets) {
+		//System.out.println(targets);
+		BoardCell loc = pickLocation(targets);
+		//System.out.println("Loc: " + loc);
+		//System.out.println("ROW " + loc.getRow());
+		//System.out.println("COL " + loc.getCol());
+		setCol(loc.getCol()); 
+		setRow(loc.getRow());
+	}
 	
-	public ArrayList<String> createSuggestion(String person, String room, String weapon) {
-		//computer logic for creating a suggestion
+	public ArrayList<String> createSuggestion(String room) {
+		//bools to check if weapon and person card is in suggestion
+		boolean hasPersonCard = false;
+		boolean hasWeaponCard = false;
+		String weapon = " ";
+		String person = " ";
+		
+		
+		ArrayList<String> suggestion = new ArrayList<String>();
+		suggestion.add(room);
+		ArrayList<Card> cards = ClueBoardGUI.getBoard().getAllCards();
+		Collections.shuffle(cards);
+		for (int i = 0; i < cards.size(); i++) {
+			if (hasPersonCard == false && cards.get(i).getCardType() == CardType.PERSON && !cardsSeen.contains(cards.get(i).getName())) {
+				person = cards.get(i).getName();
+				hasPersonCard = true;
+			}
+			if (hasWeaponCard == false && cards.get(i).getCardType() == CardType.WEAPON && !cardsSeen.contains(cards.get(i).getName())) {
+				weapon = cards.get(i).getName();
+				hasWeaponCard = true;
+			}
+		}
+		suggestion.add(weapon);
+		suggestion.add(person);
+
+		return suggestion;
+		/**computer logic for creating a suggestion
 		char r = 'Z';
 		//converts given room to a char 
 		switch (room) {
@@ -71,7 +110,7 @@ public class ComputerPlayer extends Player {
 			}
 		} else {
 			return null;
-		}
+		}*/
 	}
 	public void updateSeen(String seen) {
 		cardsSeen.add(seen);

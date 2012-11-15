@@ -2,6 +2,8 @@ package main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ import javax.swing.*;
 import javax.swing.text.html.HTMLDocument.Iterator;
 import javax.xml.stream.events.StartDocument;
 
+import ClueBoardGUI.ClueBoardGUI;
+
 import main.Card.CardType;
 
 
@@ -25,7 +29,7 @@ import main.Card.CardType;
  * @author: Lars Walen
  */
 
-public class Board extends JPanel {
+public class Board extends JPanel implements MouseListener {
 
 	private ArrayList<BoardCell> cells = new ArrayList<BoardCell>();
 	private Map<Character, String> rooms = new HashMap<Character, String>();
@@ -53,6 +57,7 @@ public class Board extends JPanel {
 	// Adjacencies and targets related members
 	private Map<Integer, LinkedList<Integer>> adjMatrix;
 	public HashSet<Integer> targets;
+	public HashSet<BoardCell> targetCells = new HashSet<BoardCell>();
 	private boolean[] visited;
 
 	//Who's Turn is it?? hmmmmm
@@ -62,6 +67,14 @@ public class Board extends JPanel {
 	Graphics g;						//for use in drawing players and cells
 	
 	int diceRoll;					//for use in gameplay
+	private String cardShown = " ";
+	
+	//booleans used in turns
+	private boolean playerSelTarget = true;
+	private boolean playerEnteredRoom = false;
+	private boolean turnComplete = true;
+	private boolean isInRoom = false;
+	private boolean submissionComplete = true;
 
 	/**
 	 * Creates board given filenames of legend file and board config file
@@ -77,6 +90,7 @@ public class Board extends JPanel {
 		visited = new boolean[numRows * numColumns];
 		adjMatrix = new HashMap<Integer, LinkedList<Integer>>();
 		targets = new HashSet<Integer>();
+
 		calcAdjacencies();
 		currentPlayerIndex = allPlayers.size()-1;
 		currentPlayer = allPlayers.get(currentPlayerIndex);
@@ -88,28 +102,38 @@ public class Board extends JPanel {
 		setSuggestions(defaultList);
 		dealCards();  //Shuffles cards and causes loadCards to fail. Use in GUI for actual gameplay
 		rollDice();
+		addMouseListener(this);
 	}
 	
 	public void paintComponent(Graphics g) {
 		int i = 0;
+
 		//draw the board
 		while (i < cells.size()) {
 			for (int j = 0; j < numRows; ++j) {
 				for (int k = 0; k < numColumns; ++k) {
 					cells.get(i).draw(g, k, j, rooms);
+					cells.get(i).setRow(j);
+					cells.get(i).setCol(k);
 					++i;
 				}
 			}
 		}
-		java.util.Iterator<Integer> it = targets.iterator();
-		int index;
-		int coord[];
-		while (it.hasNext()) {
-			index = it.next();
-			coord = calcCoords(index);
-			System.out.println("row " + coord[0] + "col" + coord[1]);
-			cells.get(index).highlight(g, coord[1], coord[0]);
-		}
+		
+		//paint the available targets if the human player
+		//if (getCurrentPlayer() == self) {
+			java.util.Iterator<Integer> it = targets.iterator();
+			int index;
+			int coord[];
+			while (it.hasNext()) {
+				index = it.next();
+				coord = calcCoords(index);
+				cells.get(index).highlight(g, coord[1], coord[0]);
+				repaint();
+			}
+
+		//}
+		
 		//draw the human player
 		self.draw(g);
 		//draw the computer player
@@ -219,7 +243,7 @@ public class Board extends JPanel {
 		self.setColor(line[1]);
 		self.setRow(Integer.parseInt(line[2]));
 		self.setCol(Integer.parseInt(line[3]));
-		self.setCurrentLocation(calcIndex(Integer.parseInt(line[3]), Integer.parseInt(line[2])));
+		self.setCurrentLocation(calcIndex(Integer.parseInt(line[2]), Integer.parseInt(line[3])));
 		allPlayers.add(self);
 		while( scan.hasNextLine() ) {
 			playersLine = scan.nextLine();
@@ -230,8 +254,7 @@ public class Board extends JPanel {
 			comp.setColor(l[1]);
 			comp.setRow(Integer.parseInt(l[2]));
 			comp.setCol(Integer.parseInt(l[3]));
-			comp.setCurrentLocation(calcIndex(comp.getCol(), comp.getRow()));
-			System.out.println(comp.getCol() + " " + comp.getRow());
+			comp.setCurrentLocation(calcIndex(comp.getRow(), comp.getCol()));
 			compPlayers.add(comp);
 			allPlayers.add(comp);
 		}
@@ -275,7 +298,7 @@ public class Board extends JPanel {
 		
 		ArrayList<Card> c = new ArrayList<Card>();
 		ArrayList<String> a = new ArrayList<String>();
-
+		
 		for (int j = 0; j < allCards.size(); j++) {
 			if (allCards.get(j).getCardType() == CardType.PERSON && personSet == false) {
 				a.add(allCards.get(j).getName());
@@ -381,6 +404,7 @@ public class Board extends JPanel {
 		for( int i : targets ) {
 			targetCells.add(getCellAt(i));
 		}
+	
 		return targetCells;	
 	}
 
@@ -475,7 +499,106 @@ public class Board extends JPanel {
 	public RoomCell getRoomCellAt(int row, int col) {
 		return (RoomCell)cells.get(calcIndex(row, col));
 	}
+	
+	//convert cell type to a string! ^.^
+	public String findMapValue(char Initial) {
+		for (Map.Entry<Character, String> entry: rooms.entrySet()) {
+			if (entry.getKey().equals(Initial)) {
+				return entry.getValue();
+			}
+		}
+		return null;
+	}
+	//calculate the next move
+	public void nextMove() {
+		playerSelTarget = false;
+		playerEnteredRoom = false;
+		//sets the next player
+		if(currentPlayerIndex == allPlayers.size()-1) {
+			currentPlayerIndex = 0;
+			currentPlayer = allPlayers.get(0);
+		} else  {
+			currentPlayerIndex++;
+			currentPlayer = allPlayers.get(currentPlayerIndex);
+		}
+		rollDice();
+		calcTargets(calcIndex(getCurrentPlayer().getRow(), getCurrentPlayer().getCol()), getDiceRoll());
+		if (currentPlayer != self) {
+			ComputerPlayer comp = (ComputerPlayer) currentPlayer;
+			//System.out.println(targets);
+			//System.out.println(getTargets());
+			comp.makeMove(getTargets());
+			targets.clear();
+			playerSelTarget = true;
+			comp.setCurrentLocation(calcIndex(comp.getCol(), comp.getRow()));
+			if (getCellAt(comp.getCurrentLocation()).isRoom()) {
+				BoardCell tempCell = getCellAt(comp.getCurrentLocation());
+				char initial = tempCell.getCellType();
+				String roomS = findMapValue(initial);
+				setSuggestions((comp.createSuggestion(roomS)));
+				setCardShown(disproveSuggestion(getSuggestions(), comp));
+				if (cardShown == null) {
+					setAccusations(getSuggestions());
+					setWon();
+				}
+			}	
+			repaint();
+		} else { repaint(); }
+	}
+	
+	//roll random dice
+	public void rollDice() {
+		Random roll = new Random();
+		int newRoll = roll.nextInt(6);
+		setDiceRoll(newRoll + 1);
+	}
 
+	//Mouse Listener for the board
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
+	public void mousePressed(MouseEvent e)  {
+		//turnComplete = false;
+				setSubmissionComplete(false);
+				finishTurn(e);
+	} 
+
+	//if player has not moved, they cannot continue
+	public void finishTurn(MouseEvent e) {
+		java.util.Iterator<BoardCell> it = getTargets().iterator();
+		BoardCell twazock;
+		while (it.hasNext()) {
+			
+			twazock = it.next();
+			
+			if (twazock.cellClick(e.getX(), e.getY())) {
+				getCurrentPlayer().setCurrentLocation(calcIndex(twazock.getRow(), twazock.getCol()));
+				getCurrentPlayer().setRow(twazock.getRow());
+				getCurrentPlayer().setCol(twazock.getCol());
+				playerSelTarget = true;
+				targets.clear();
+				BoardCell cell = getCellAt(self.getCurrentLocation());
+				if (cell.isRoom()) {
+					int row = getCurrentPlayer().getRow();
+					int col = getCurrentPlayer().getCol();
+					char initial = cell.getCellType();
+					String roomS = findMapValue(initial);
+					DetNotesGUI.makeSuggestion sugpanel = new DetNotesGUI.makeSuggestion(ClueBoardGUI.getBoard(), roomS);
+					sugpanel.setVisible(true);
+				} else {
+					setSubmissionComplete(true);
+				}
+				repaint();
+				return;
+			}
+		}
+		//no improper target can be selected
+		if (getCurrentPlayer() == getSelf() && playerSelTarget == false) {
+			JOptionPane.showMessageDialog(null, "FATALITY, Please select another target");
+		}
+	}  
+	
 	/*
 	 *  Getters
 	 */
@@ -543,12 +666,16 @@ public class Board extends JPanel {
 		accusations = newAccusations;
 	}
 	
+
 	public void setWon() {
 		//determines if a winner has occured by comparing accusation to answers
-		if (getAnswers().contains(getAccusations().get(0)) && getAnswers().contains(getAccusations().get(1)) && getAnswers().contains(getAccusations().get(2))) {
+		if (getAccusations().contains(getAnswers().get(0)) && getAccusations().contains(getAnswers().get(1)) && getAccusations().contains(getAnswers().get(2))) {
 			won = true;
+			JOptionPane.showMessageDialog(null, getCurrentPlayer().getName() + " has solved the crime!!! Congratulations!\n" + accusations);
+			setVisible(false);
 		} else {
 			won = false;
+			JOptionPane.showMessageDialog(null, getCurrentPlayer().getName() + " has accused incorrectly!\n" + accusations);
 		}
 	}
 
@@ -573,24 +700,20 @@ public class Board extends JPanel {
 	public void setDiceRoll(int diceRoll) {
 		this.diceRoll = diceRoll;
 	}
-
-	public void nextMove() {
-		rollDice();
-		calcTargets(getCurrentPlayer().getCurrentLocation(), getDiceRoll());
-		repaint();
-		if(currentPlayerIndex == allPlayers.size()-1) {
-			currentPlayerIndex = 0;
-			currentPlayer = allPlayers.get(0);
-		} else  {
-			currentPlayerIndex++;
-			currentPlayer = allPlayers.get(currentPlayerIndex);
-		}
-
+	public void setSubmissionComplete(boolean status) {
+		submissionComplete = status;
+	}
+	public boolean getSubmissionComplete() {
+		return submissionComplete;
+	}
+	public String getCardShown() {
+		return cardShown;
+	}
+	public void setCardShown(String c) {
+		cardShown = c;
+	}
+	public boolean isPlayerSelTarget() {
+		return playerSelTarget;
 	}
 
-	public void rollDice() {
-		Random roll = new Random();
-		int newRoll = roll.nextInt(6);
-		setDiceRoll(newRoll + 1);
-	}
 }

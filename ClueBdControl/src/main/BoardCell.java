@@ -2,6 +2,8 @@ package main;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.Map;
 
 public abstract class BoardCell {
@@ -47,6 +49,15 @@ public abstract class BoardCell {
 	public int getCol() {
 		return col;
 	}
+	
+
+	public void setRow(int row) {
+		this.row = row;
+	}
+
+	public void setCol(int col) {
+		this.col = col;
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -67,6 +78,14 @@ public abstract class BoardCell {
 	}
 
 	abstract void draw(Graphics g, int row, int col, Map<Character, String> rooms);
+
+	public boolean cellClick(int mouseX, int mouseY) {
+		Rectangle rect = new Rectangle(col*size, row*size, size, size);
+		if (rect.contains(new Point(mouseX, mouseY))) 
+			return true;
+		return false;
+	}
+
 
 
 }

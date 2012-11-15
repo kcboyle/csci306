@@ -59,7 +59,8 @@ public class RoomCell extends BoardCell {
 		Graphics2D room = (Graphics2D) g;
 		//color the closet differently 
 		if (getInitial() == 'X') {
-			room.setColor(Color.RED);
+			Color roomColor = new Color(193, 46, 54); 
+			room.setColor(roomColor);
 			room.fillRect(row*size, col*size, size, size);
 			
 		} else {			//draw a normal room cell

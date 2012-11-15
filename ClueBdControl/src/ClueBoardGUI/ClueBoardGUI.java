@@ -12,8 +12,8 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import DetectiveNotesGUI.DetectiveNotesGUI;
-import DetectiveNotesGUI.PeopleSeenPanel;
+import DetNotesGUI.DetectiveNotesGUI;
+import DetNotesGUI.PeopleSeenPanel;
 
 import main.Board;
 
@@ -78,6 +78,9 @@ public class ClueBoardGUI extends JFrame {
 		return item;
 	}
 	
+	public static Board getBoard() {
+		return board;
+	}
 	//creates exit menu item
 	private JMenuItem createFileExitItem(){
 		JMenuItem item = new JMenuItem("Exit");
@@ -102,8 +105,7 @@ public class ClueBoardGUI extends JFrame {
 		gui.setVisible(true);
 		gui.setResizable(false);
 		//JOptionPane.showMessageDialog(gui, "You are " + playerName + " the White, press Next Player to begin", "Welcome To Clue!", JOptionPane.INFORMATION_MESSAGE);
-		// This will draw the new location of player
-		//gui.updatePlayer(100, 100);
+
 
 	}
 

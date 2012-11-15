@@ -92,6 +92,20 @@ public class WestPanel extends JPanel{
 			dis.setText("No current card shown");
 		}
 	}
+	public void changeLocation() {
+		//move the player accused in the selection to the player's current room
+		String playerName;
+		for (int j = 0; j < board.getSuggestions().size(); ++j) {
+			playerName = board.getSuggestions().get(j);
+			for (int i = 0; i < board.getAllPlayers().size(); ++i) {
+				if (board.getAllPlayers().get(i).getName().equals(playerName)) {
+					board.getAllPlayers().get(i).setCol(board.getCurrentPlayer().getCol());
+					board.getAllPlayers().get(i).setRow(board.getCurrentPlayer().getRow());
+					board.getAllPlayers().get(i).setCurrentLocation(board.getCurrentPlayer().getCurrentLocation());
+				}
+			}
+		}	
+	}
 	
 	//creating makeAccusationButton listener
 	private class AccusationButtonListener implements ActionListener {
@@ -116,6 +130,7 @@ public class WestPanel extends JPanel{
 			if (board.getSubmissionComplete()) {
 				if (board.isPlayerSelTarget()) {
 					board.nextMove();
+					changeLocation();
 					resetDice();
 					resetCurrentPlayer();
 					repaint();

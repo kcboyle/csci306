@@ -21,17 +21,18 @@ public class makeSuggestion extends JDialog{
 	//Basic GUI Setup
 	Board board;
 	String room, weapon, person = "";
-	private JComboBox roomBox, personBox, weaponBox;
+	private JComboBox personBox, weaponBox;
 	
 	public makeSuggestion(Board board, String room) {
 		this.board = board;
+		this.room = room;
 		setSize(new Dimension(200,500));
 		setTitle(board.getCurrentPlayer().getName() + " is making an suggestion!");
 		setLayout(new GridLayout(5, 1)); 		//makes big button
 		JPanel roomPanel = new JPanel();
 		roomPanel.setBorder(new TitledBorder (new EtchedBorder(), "Room Guess"));
-		roomBox = createRoomCombo();
-		roomPanel.add(roomBox);
+		JLabel roomLabel = new JLabel(room);
+		roomPanel.add(roomLabel);
 		add(roomPanel);
 
 		JPanel personPanel = new JPanel();
@@ -115,10 +116,9 @@ public class makeSuggestion extends JDialog{
 	}
 	private class SubmitListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			room = roomBox.getSelectedItem().toString();
 			weapon = weaponBox.getSelectedItem().toString();
 			person = personBox.getSelectedItem().toString();
-			if (!(room.equals("Pick a room")) && !(weapon.equals("Pick a weapon")) && !(person.equals("Pick a person"))) {
+			if (!(weapon.equals("Pick a weapon")) && !(person.equals("Pick a person"))) {
 				ArrayList<String> a = new ArrayList<String>();
 				a.add(weapon);
 				a.add(person);

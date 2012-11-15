@@ -108,7 +108,7 @@ public class makeAccusation extends JFrame {
 				a.add(room);
 				board.setAccusations(a);
 				board.setWon();
-				board.setVisible(false);
+				setVisible(false);
 			} else {
 				JOptionPane.showMessageDialog(null, "FAIL");
 				board.setSubmissionComplete(false);

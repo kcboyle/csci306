@@ -21,6 +21,7 @@ import javax.swing.text.html.HTMLDocument.Iterator;
 import javax.xml.stream.events.StartDocument;
 
 import ClueBoardGUI.ClueBoardGUI;
+import ClueBoardGUI.WestPanel;
 
 import main.Card.CardType;
 
@@ -503,6 +504,12 @@ public class Board extends JPanel implements MouseListener {
 		} else {
 			targets = calcTargetsRecursively(startLocation, numberOfSteps);
 		}
+		//prevents two characters sharing the same cell
+		for (int q = 0; q < allPlayers.size(); ++q) {
+			if (targets.contains(allPlayers.get(q).getCurrentLocation()) && !getCellAt(allPlayers.get(q).getCurrentLocation()).isRoom()) {
+				targets.remove(allPlayers.get(q).getCurrentLocation());
+			}
+		}
 	}
 
 	public HashSet<Integer> calcTargetsRecursively(int startLocation,
@@ -537,17 +544,21 @@ public class Board extends JPanel implements MouseListener {
 		for (int j = 0; j < compPlayers.size(); j++) {
 			players.add(compPlayers.get(j));
 		}
+		//move the accused player to the accused room in a suggestion
+		for(int q = 0; q < allPlayers.size(); q++ ) {
+			if (suggestion.contains(players.get(q).getName())) {
+				allPlayers.get(q).setCurrentLocation(currentPlayer.getCurrentLocation());
+				allPlayers.get(q).setRow(currentPlayer.getRow());
+				allPlayers.get(q).setCol(currentPlayer.getCol());
+				repaint();
+			}
+		}
 		playerInt = p_rand.nextInt(players.size());
-		ArrayList<String> playerCards = new ArrayList<String>(); // copy list of
-																	// the cards
-																	// each
-																	// player
-																	// has
+		ArrayList<String> playerCards = new ArrayList<String>(); // copy list of the cards each player has
 		int counter = players.size(); // iteration through each player only once
-		ArrayList<String> matches = new ArrayList<String>(); // holds which
-																// cards would
-																// match the
-																// suggestion
+		ArrayList<String> matches = new ArrayList<String>(); // holds which cards would match the suggestion
+	
+		
 		while (counter > 0) {
 			if (!(current.getName().equals(players.get(playerInt).getName()))) {
 				for (int i = 0; i < players.get(playerInt).getCards().size(); ++i) {
@@ -639,8 +650,7 @@ public class Board extends JPanel implements MouseListener {
 				BoardCell tempCell = getCellAt(comp.getCurrentLocation());
 				char initial = tempCell.getCellType();
 				String roomS = findMapValue(initial);
-				ArrayList<String> compSuggestions = comp
-						.createSuggestion(roomS);
+				ArrayList<String> compSuggestions = comp.createSuggestion(roomS);
 				setSuggestions(compSuggestions);
 				String shown = disproveSuggestion(getSuggestions(), comp);
 				setCardShown(shown);
@@ -648,6 +658,8 @@ public class Board extends JPanel implements MouseListener {
 					setAccusations(getSuggestions());
 					setWon();
 				}
+				WestPanel.resetLastGuess();
+				WestPanel.resetLastDisprovement();
 			}
 			repaint();
 		} else {
@@ -816,9 +828,14 @@ public class Board extends JPanel implements MouseListener {
 				&& getAccusations().contains(getAnswers().get(1))
 				&& getAccusations().contains(getAnswers().get(2))) {
 			won = true;
-			JOptionPane.showMessageDialog(null, getCurrentPlayer().getName()
-					+ " has solved the crime!!! Congratulations!\n"
-					+ accusations);
+			JOptionPane.showMessageDialog(null, getCurrentPlayer().getName() + " has solved the crime!!! Congratulations!\n"	+ accusations);
+			//Play, cause we really needed to at this point
+			if (currentPlayer == self) {
+				JOptionPane.showMessageDialog(null, "End? No, it doesn't end here. Death is just a new path, a path everyone has to take.");
+			} else {
+				JOptionPane.showMessageDialog(null, "There never was much hope...just a fool's hope");
+			}
+			
 			setVisible(false);
 		} else {
 			won = false;

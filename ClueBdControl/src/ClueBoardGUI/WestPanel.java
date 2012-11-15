@@ -56,7 +56,7 @@ public class WestPanel extends JPanel{
 		lastGuessPanel.setBorder(new TitledBorder (new EtchedBorder(), "Last Guess "));
 		for(int i = 0; i < board.getSuggestions().size(); ++i) {
 			//default values just say person, room, weapon. in board setup
-			System.out.println(board.getSuggestions().get(i) + ", ");
+			//System.out.println(board.getSuggestions().get(i) + ", ");
 			guess.setFont(new Font("Chiller", Font.BOLD, 20));
 			resetLastGuess();
 			lastGuessPanel.add(guess);
@@ -66,7 +66,7 @@ public class WestPanel extends JPanel{
 		//displays disprovement of last guess
 		JPanel guessResultPanel = new JPanel();
 		guessResultPanel.setBorder(new TitledBorder (new EtchedBorder(), "Previous Disproval "));
-		System.out.println(board.getCardShown());
+		//System.out.println(board.getCardShown());
 		dis.setFont(new Font("Chiller", Font.BOLD, 25));	
 		resetLastDisprovement();
 		guessResultPanel.add(dis);		
@@ -92,20 +92,7 @@ public class WestPanel extends JPanel{
 			dis.setText("No current card shown");
 		}
 	}
-	public void changeLocation() {
-		//move the player accused in the selection to the player's current room
-		String playerName;
-		for (int j = 0; j < board.getSuggestions().size(); ++j) {
-			playerName = board.getSuggestions().get(j);
-			for (int i = 0; i < board.getAllPlayers().size(); ++i) {
-				if (board.getAllPlayers().get(i).getName().equals(playerName)) {
-					board.getAllPlayers().get(i).setCol(board.getCurrentPlayer().getCol());
-					board.getAllPlayers().get(i).setRow(board.getCurrentPlayer().getRow());
-					board.getAllPlayers().get(i).setCurrentLocation(board.getCurrentPlayer().getCurrentLocation());
-				}
-			}
-		}	
-	}
+	
 	
 	//creating makeAccusationButton listener
 	private class AccusationButtonListener implements ActionListener {
@@ -114,7 +101,7 @@ public class WestPanel extends JPanel{
 				DetNotesGUI.makeAccusation humanAccusation = new DetNotesGUI.makeAccusation(board);
 				humanAccusation.setVisible(true);
 			} else {
-				JOptionPane.showMessageDialog(null, "YOU SHALL NOT MOVE! *whacks*");
+				JOptionPane.showMessageDialog(null, "YOU SHALL NOT ACCUSE! (YET)");
 			}
 		}
 	}
@@ -125,16 +112,12 @@ public class WestPanel extends JPanel{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			//displays a humanGuess on the click of nextTurn
-			resetLastGuess();
-			resetLastDisprovement();
 			if (board.getSubmissionComplete()) {
 				if (board.isPlayerSelTarget()) {
 					board.nextMove();
-					changeLocation();
 					resetDice();
 					resetCurrentPlayer();
 					repaint();
-				
 				} else {
 					JOptionPane.showMessageDialog(null, "At least move....exercise is good for you!");
 				}

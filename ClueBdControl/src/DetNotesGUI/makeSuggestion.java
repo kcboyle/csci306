@@ -13,6 +13,8 @@ import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import ClueBoardGUI.WestPanel;
+
 import main.Board;
 import main.Card.CardType;
 
@@ -126,6 +128,8 @@ public class makeSuggestion extends JDialog{
 				board.setSuggestions(a);
 				String shown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
 				board.setCardShown(shown);
+				WestPanel.resetLastGuess();
+				WestPanel.resetLastDisprovement();
 				board.setSubmissionComplete(true);
 				repaint();
 			} else {

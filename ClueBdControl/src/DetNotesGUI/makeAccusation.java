@@ -110,7 +110,7 @@ public class makeAccusation extends JFrame {
 				board.setWon();
 				setVisible(false);
 			} else {
-				JOptionPane.showMessageDialog(null, "FAIL");
+				JOptionPane.showMessageDialog(null, "FAILED ACCUSATION. Ensure 3 choices made");
 				board.setSubmissionComplete(false);
 			}
 		}

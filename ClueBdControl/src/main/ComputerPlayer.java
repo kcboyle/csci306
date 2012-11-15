@@ -27,7 +27,7 @@ public class ComputerPlayer extends Player {
 		ArrayList<BoardCell> nonRooms = new ArrayList<BoardCell>();
 		Random rand = new Random();
 		for(BoardCell key : targets) {
-			System.out.println("key: " + key);
+			//System.out.println("key: " + key);
 			if (key.isRoom() && (key.getCellType() != getLastRoomVisited())) {
 				return key;
 			} else {
@@ -39,11 +39,7 @@ public class ComputerPlayer extends Player {
 		return nonRooms.get(randInt);
 	}
 	public void makeMove(Set<BoardCell> targets) {
-		//System.out.println(targets);
 		BoardCell loc = pickLocation(targets);
-		//System.out.println("Loc: " + loc);
-		//System.out.println("ROW " + loc.getRow());
-		//System.out.println("COL " + loc.getCol());
 		setCol(loc.getCol()); 
 		setRow(loc.getRow());
 	}
@@ -72,45 +68,7 @@ public class ComputerPlayer extends Player {
 		}
 		suggestion.add(weapon);
 		suggestion.add(person);
-
 		return suggestion;
-		/**computer logic for creating a suggestion
-		char r = 'Z';
-		//converts given room to a char 
-		switch (room) {
-			case "Library": r = 'L';
-							break;
-			case "Conservatory": r = 'C';
-							break;
-			case "Kitchen": r = 'K';
-							break;
-			case "Ballroom": r = 'B';
-							break;
-			case "Billiard Room": r = 'R';
-							break;
-			case "Study": r = 'S';
-							break;
-			case "Dining Room": r = 'D';
-							break;
-			case "Lounge": r = 'O';
-							break;
-			case "Hall": r = 'H';
-							break;
-		}
-		//must be currentRoom 
-		if (r == getLastRoomVisited()) {
-			if (!(cardsSeen.contains(person)) && !(cardsSeen.contains(weapon))) {
-				ArrayList<String> selection = new ArrayList<String>();
-				selection.add(person);
-				selection.add(room);
-				selection.add(weapon);
-				return selection;
-			} else {
-				return null;
-			}
-		} else {
-			return null;
-		}*/
 	}
 	public void updateSeen(String seen) {
 		cardsSeen.add(seen);

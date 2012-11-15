@@ -124,7 +124,8 @@ public class makeSuggestion extends JDialog{
 				a.add(person);
 				a.add(room);
 				board.setSuggestions(a);
-				board.setCardShown(board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer()));
+				String shown = board.disproveSuggestion(board.getSuggestions(), board.getCurrentPlayer());
+				board.setCardShown(shown);
 				board.setSubmissionComplete(true);
 				repaint();
 			} else {

@@ -11,6 +11,7 @@ public abstract class BoardCell {
 	protected int row;
 	protected int col;
 	final static public int size = 26;
+	private boolean person = false;
 	
 	public boolean isWalkway() {
 		if( cellType == 'W' ) {
@@ -27,6 +28,15 @@ public abstract class BoardCell {
 			return true;
 		}
 	}
+	
+	public boolean isPerson() {
+		return person;
+	}
+
+	public void setPerson(boolean person) {
+		this.person = person;
+	}
+
 	
 	public abstract boolean isDoorway();
 	

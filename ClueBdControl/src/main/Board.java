@@ -100,6 +100,7 @@ public class Board extends JPanel implements MouseListener {
 		defaultList.add("room");
 		defaultList.add("weapon");
 		setSuggestions(defaultList);
+		setCardShown("No current card shown");
 		dealCards();  //Shuffles cards and causes loadCards to fail. Use in GUI for actual gameplay
 		rollDice();
 		addMouseListener(this);
@@ -333,9 +334,6 @@ public class Board extends JPanel implements MouseListener {
 				i++;
 			}
 		}
-		for(int k = 0; k < 3; ++k) {
-			System.out.println(answers.get(k));
-		}
 	}
 
 	/**
@@ -523,6 +521,7 @@ public class Board extends JPanel implements MouseListener {
 		}
 		rollDice();
 		calcTargets(calcIndex(getCurrentPlayer().getRow(), getCurrentPlayer().getCol()), getDiceRoll());
+		//if next player is a computer
 		if (currentPlayer != self) {
 			ComputerPlayer comp = (ComputerPlayer) currentPlayer;
 			//System.out.println(targets);
@@ -530,20 +529,24 @@ public class Board extends JPanel implements MouseListener {
 			comp.makeMove(getTargets());
 			targets.clear();
 			playerSelTarget = true;
-			comp.setCurrentLocation(calcIndex(comp.getCol(), comp.getRow()));
+			comp.setCurrentLocation(calcIndex(comp.getRow(), comp.getCol()));
 			if (getCellAt(comp.getCurrentLocation()).isRoom()) {
 				BoardCell tempCell = getCellAt(comp.getCurrentLocation());
 				char initial = tempCell.getCellType();
 				String roomS = findMapValue(initial);
-				setSuggestions((comp.createSuggestion(roomS)));
-				setCardShown(disproveSuggestion(getSuggestions(), comp));
+				ArrayList<String> compSuggestions = comp.createSuggestion(roomS);
+				setSuggestions(compSuggestions);
+				String shown = disproveSuggestion(getSuggestions(), comp);
+				setCardShown(shown);
 				if (cardShown == null) {
 					setAccusations(getSuggestions());
 					setWon();
 				}
 			}	
 			repaint();
-		} else { repaint(); }
+		} else { 
+			repaint(); 
+		}
 	}
 	
 	//roll random dice
